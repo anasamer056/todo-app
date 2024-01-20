@@ -1,0 +1,139 @@
+/* FONTS  */
+@font-face {
+    font-family: 'Poppins';
+    font-weight: 500;
+    font-style: normal;
+    src: url('./fonts/Poppins-Medium.woff2') format("woff2"),
+    url('./fonts/Poppins-Medium.woff') format('woff') 
+} 
+@font-face {
+    font-family: 'Poppins';
+    font-weight: 400;
+    font-style: normal;
+    src: url('./fonts/Poppins-Regular.woff2') format("woff2"),
+    url('./fonts/Poppins-Regular.woff') format('woff') 
+} 
+@font-face {
+    font-family: 'Poppins';
+    font-weight: 700;
+    font-style: normal;
+    src: url(./fonts/Poppins-Bold.woff2) format('woff2'),
+    url(./fonts/Poppins-Bold.woff) format('woff');
+}
+@font-face {
+    font-family: 'Poppins';
+    font-weight: 300;
+    font-style: normal;
+    src: url('./fonts/Poppins-Light.woff2') format('woff2'),
+    url('./fonts/Poppins-Light.woff') format('woff');
+}
+
+/* VARS */
+:root {
+    --drop-shadow: 0px 2px 4px  rgba(0, 0, 0, 0.16);
+    --max-width: 900px;
+    --spacing-5: 5px;
+    --spacing-10: 10px;
+    --spacing-15: 15px;
+    --spacing-20: 20px;
+    --spacing-40: 40px;
+    --border-radius: 8px;
+    --white: #fffbfb;
+    --grey: #f0eef1;
+    --red: rgb(246, 109, 109);
+    --green: rgb(98, 221, 92);
+    --title-bar-height: 50px; 
+  }
+  
+  /* CSS RESET */
+  
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+  }
+  
+
+  
+  /* UTILITY */
+  .flex-center {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
+  
+  .flex-start {
+      display: flex;
+      justify-content: flex-start;
+  }
+  
+  .flex-space-bet {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  }
+  
+  
+  
+  .btn {
+      font-family: inherit;
+      border: 0;
+      cursor: pointer;
+      padding: var(--spacing-10) var(--spacing-15);
+      border-radius: var(--border-radius);
+      transition: all 0.15s ease-in-out;
+  }
+  
+  .btn:hover {
+      filter: brightness(80%);
+  }
+  
+  .btn-trans {
+      background-color: transparent;
+      font-size: 1.2rem;
+      font-weight: 600;
+  }
+  .btn-trans:hover,
+  .btn-text:hover {
+      background-color: rgba(128, 128, 128, 0.2);
+  }
+  
+  .btn-text {
+      background-color: transparent;
+      font-size: 1rem;
+      font-weight: 600;
+      border-left: 1px solid b;
+      padding: var(--spacing-5) var(--spacing-10);
+  }
+  
+  .btn-green {
+      width: 100%;
+      background-color: var(--green);
+  }
+  .btn-red {
+      width: 100%;
+      background-color: var(--red);
+  }
+
+  /* BODY */
+
+  body{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  .body-grid {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    flex: 1 1 auto;
+}
+
+
+  .sidebar {
+    background-color: aqua;
+  }
+  .content{
+    background-color: yellow;
+  }
