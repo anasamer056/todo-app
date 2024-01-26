@@ -202,3 +202,19 @@ body {
 .content {
     background-color: var(--back-light-black);
 }
+
+.btn-to-input {
+    display: flex;
+    flex-direction: column;
+    & form {
+        display: flex;
+        flex-direction: column;
+    }
+    & .form-btns {
+        display: flex;
+        gap: 8px;
+        > button {
+            flex:auto;
+        }
+    }
+}
