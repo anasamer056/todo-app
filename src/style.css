@@ -3,32 +3,32 @@
     font-family: 'Poppins';
     font-weight: 500;
     font-style: normal;
-    src: url('./fonts/Poppins-Medium.woff2') format("woff2"),
-        url('./fonts/Poppins-Medium.woff') format('woff')
+    src: url('./assets/fonts/Poppins-Medium.woff2') format("woff2"),
+        url('./assets/fonts/Poppins-Medium.woff') format('woff')
 }
 
 @font-face {
     font-family: 'Poppins';
     font-weight: 400;
     font-style: normal;
-    src: url('./fonts/Poppins-Regular.woff2') format("woff2"),
-        url('./fonts/Poppins-Regular.woff') format('woff')
+    src: url('./assets/fonts/Poppins-Regular.woff2') format("woff2"),
+        url('./assets/fonts/Poppins-Regular.woff') format('woff')
 }
 
 @font-face {
     font-family: 'Poppins';
     font-weight: 700;
     font-style: normal;
-    src: url(./fonts/Poppins-Bold.woff2) format('woff2'),
-        url(./fonts/Poppins-Bold.woff) format('woff');
+    src: url("./assets/fonts/Poppins-Bold.woff2") format('woff2'),
+        url("./assets/fonts/Poppins-Bold.woff") format('woff');
 }
 
 @font-face {
     font-family: 'Poppins';
     font-weight: 300;
     font-style: normal;
-    src: url('./fonts/Poppins-Light.woff2') format('woff2'),
-        url('./fonts/Poppins-Light.woff') format('woff');
+    src: url('./assets/fonts/Poppins-Light.woff2') format('woff2'),
+        url('./assets/fonts/Poppins-Light.woff') format('woff');
 }
 
 /* VARS */
@@ -201,9 +201,11 @@ body {
 
 #content {
     background-color: var(--back-light-black);
+    padding: 16px;
 }
 
 .btn-to-input {
+    margin-top: 16px;
     display: flex;
     flex-direction: column;
     & form {
@@ -217,4 +219,32 @@ body {
             flex:auto;
         }
     }
+}
+
+/* TODO */
+.todo-wrapper {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.todo-circle {
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    & svg {
+        height: 1.1em;
+        fill: white;
+    }
+}
+.todo-circle:hover::after{
+    content: "✔";
+    position: absolute;
+    right: 14%;
+    color: white;
+    font-size: 0.9em;
+    
+}
+.todo-title{
+    flex: auto;
 }
