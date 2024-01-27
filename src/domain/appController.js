@@ -5,6 +5,7 @@ class AppController {
     addTodoUseCase(project, todo){
         this.db.addTodoToDb(project, todo); 
     }
+    
 }
 
 export default AppController;

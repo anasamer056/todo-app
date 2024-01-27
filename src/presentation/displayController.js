@@ -12,12 +12,12 @@ class DisplayController {
     }
     renderMainContent(project) {
         const content = document.querySelector("#content");
-        this.$appendInputComponent(content, "task");
+        this.$appendTodoInputComponent(content, project);
     }
-    $appendInputComponent(parentNode, inputTitle){
+    $appendTodoInputComponent(parentNode, project){
         const div = document.createElement("div");
         div.classList.add("btn-to-input");
-        div.innerHTML = `<button>Add ${inputTitle}</button>
+        div.innerHTML = `<button>Add task</button>
         <form>
             <input type="text" placeholder="Your todo goes here">
             <div class="form-btns">
@@ -32,7 +32,6 @@ class DisplayController {
             e.preventDefault();
             console.log("test");
             const todo = new Todo("first todo");
-            const project = new Project("second");
             this.app.addTodoUseCase(project, todo);
         });
     }
