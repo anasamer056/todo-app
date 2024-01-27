@@ -1,9 +1,17 @@
+import Project from "../domain/entities/project";
+import Todo from "../domain/entities/todo";
+
 class LocalStorage {
     constructor(){
         
     }
+    /**
+     * Writes a `todo` to the local storage under `project`
+     * @param {Project} project 
+     * @param {Todo} todo 
+     */
     addTodoToDb(project, todo){
-        if(!this.constructor.storageAvailable()){
+        if(!this.$storageAvailable()){
             throw new localStorageNotAvailable();
         }
         
@@ -17,7 +25,11 @@ class LocalStorage {
         
     }
 
-    static storageAvailable() {
+    /**
+     * Checks whether localStorage is supported and available
+     * @returns {boolean}
+     */
+    $storageAvailable() {
         let storage;
         try {
           storage = window["localStorage"];
@@ -45,6 +57,10 @@ class LocalStorage {
       } 
 }
 
+/**
+ * Error to throw when app can't access localStorage
+ * @extends Error
+ */
 class localStorageNotAvailable extends Error {
     constructor(){
         super("Local storage not available"); 

@@ -1,4 +1,10 @@
+import LocalStorage from "../data/localStorage";
+
 class AppController {
+    /**
+     * @constructor
+     * @param {LocalStorage} db 
+     */
     constructor(db) {
         this.db = db
     }
