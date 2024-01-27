@@ -248,3 +248,20 @@ body {
 .todo-title{
     flex: auto;
 }
+
+.close-btn-todo {
+    vertical-align: middle;
+    visibility: hidden;
+    cursor: pointer;
+    padding: 4px;
+    background-color: transparent;
+    color: var(--white);
+    border: 0;
+    font-size: 1.2em;
+}
+
+
+.todo-wrapper:hover .close-btn-todo {
+    visibility: visible;
+}
+
