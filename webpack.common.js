@@ -1,6 +1,8 @@
+
 const { timeStamp } = require('console');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+
 
 module.exports = {
   entry: './src/main.js',
@@ -25,9 +27,17 @@ module.exports = {
         type: 'asset/resource',
       },
       {
-        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        test: /\.(png|jpg|jpeg|gif)$/i,
         type: 'asset/resource',
       },
+      {
+        test: /\.svg/,
+        type: 'asset/source',
+      },
+      {
+        test: /\.html$/i,
+        loader: "html-loader",
+      },  
     ],
   },
 };

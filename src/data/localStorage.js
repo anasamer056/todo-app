@@ -12,7 +12,7 @@ class LocalStorage {
      */
     addTodoToDb(project, todo){
         if(!this.$storageAvailable()){
-            throw new localStorageNotAvailable();
+            throw new LocalStorageNotAvailable();
         }
         
         if(localStorage.getItem(project.title)){
@@ -22,7 +22,19 @@ class LocalStorage {
         } else {
             localStorage.setItem(project.title, JSON.stringify([todo]));
         }
-        
+    }
+
+    readTodosFromDb(project){
+      if (!localStorage.getItem(project.title)){
+        throw new ProjectNotFound();
+      }
+      const parsedTodoList = JSON.parse(localStorage.getItem(project.title));
+      const result = [];
+      for (const item of parsedTodoList){
+        const todo = new Todo(item.title);
+        result.push(todo);
+      } 
+      return result;
     }
 
     /**
@@ -61,10 +73,16 @@ class LocalStorage {
  * Error to throw when app can't access localStorage
  * @extends Error
  */
-class localStorageNotAvailable extends Error {
+class LocalStorageNotAvailable extends Error {
     constructor(){
         super("Local storage not available"); 
     }
+}
+
+class ProjectNotFound extends Error {
+  constructor() {
+    super("Project not found");
+  }
 }
 
 export default LocalStorage;

@@ -11,7 +11,9 @@ class AppController {
     addTodoUseCase(project, todo){
         this.db.addTodoToDb(project, todo); 
     }
-    
+    readTodosUseCase(project) {
+        return this.db.readTodosFromDb(project);
+    }
 }
 
 export default AppController;
