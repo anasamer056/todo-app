@@ -28,6 +28,10 @@ class DisplayController {
     renderMainContent(project) {
         const content = document.querySelector("#content");
         content.innerHTML = '';
+
+        const projectTitleDiv = document.createElement("h3");
+        projectTitleDiv.textContent = project.title;
+        
         const todoContainer = document.createElement("div");
         todoContainer.classList.add("todo-container");
 
@@ -36,6 +40,7 @@ class DisplayController {
             this.$renderTodo(todoContainer, todo);
         }
 
+        content.appendChild(projectTitleDiv)
         content.appendChild(todoContainer);
         this.$appendTodoInputComponent(content, project);
     }

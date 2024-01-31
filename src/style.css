@@ -209,6 +209,11 @@ body {
     padding: 16px;
 }
 
+.todo-container {
+    padding: 20px;
+    padding-bottom: 5px;
+}
+
 .btn-to-input {
     margin-top: 16px;
     display: flex;
