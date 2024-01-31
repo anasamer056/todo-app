@@ -26,12 +26,12 @@ class LocalStorage {
     }
 
     readTodosFromDb(project){
-      if (!localStorage.getItem(project.title)){
+      if (!localStorage.getItem(project.timestamp)){
         throw new ProjectNotFound();
       }
-      const parsedTodoList = JSON.parse(localStorage.getItem(project.title));
+      const parsedData = JSON.parse(localStorage.getItem(project.timestamp));
       const result = [];
-      for (const item of parsedTodoList){
+      for (const item of parsedData.todos){
         const todo = new Todo(item.title);
         result.push(todo);
       } 

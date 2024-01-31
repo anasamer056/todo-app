@@ -12,7 +12,8 @@ class Project {
     }
 
     static fromJSON(projectJson){
-        return new Project(projectJson.title, projectJson.timestamp);
+        const parsedJson = JSON.parse(projectJson);
+        return new Project(parsedJson.project.title, parsedJson.project.timestamp);
     }
 }
 
