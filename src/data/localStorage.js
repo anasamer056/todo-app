@@ -15,16 +15,12 @@ class LocalStorage {
         if(!this.$storageAvailable()){
             throw new LocalStorageNotAvailable();
         }
-        console.log(localStorage.getItem(project.timestamp))
-        if(localStorage.getItem(project.timestamp)){
-            const parsedData = JSON.parse(localStorage.getItem(project.timestamp));
-            console.log(parsedData);
-            const todoList = parsedData.todoList;
-            todoList.push(todo);
-            localStorage.setItem(project.timestamp, JSON.stringify({project, todoList}));
-        } else {
-            localStorage.setItem(project.timestamp, JSON.stringify({project, toods:[]}));
-        }
+
+        const parsedData = JSON.parse(localStorage.getItem(project.timestamp));
+        console.log(parsedData);
+        const todoList = parsedData.todoList;
+        todoList.push(todo);
+        localStorage.setItem(project.timestamp, JSON.stringify({project, todoList}));        
     }
 
     readTodosFromDb(project){
