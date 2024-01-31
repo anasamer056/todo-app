@@ -14,7 +14,7 @@ class DisplayController {
      * Initiates the app upon first loading
      */
     init() {
-        const mainProject = new Project("main");
+        const mainProject = new Project("main", Date.now());
         this.app.addProjectUseCase(mainProject);
         this.renderMainContent(mainProject);
         this.renderSidebar();
@@ -123,7 +123,7 @@ class DisplayController {
         addBtn.addEventListener("click", (e) => {
             e.preventDefault();
             const formData = new FormData(todoForm);
-            const project = new Project(formData.get("title"));
+            const project = new Project(formData.get("title"), Date.now());
             this.app.addProjectUseCase(project);
             this.renderSidebar();
         });

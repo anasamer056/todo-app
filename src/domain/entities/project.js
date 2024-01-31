@@ -6,8 +6,13 @@ class Project {
      * Creates a `Project`
      * @param {string} title - The title of the project
      */
-    constructor(title){
+    constructor(title, timestamp){
         this.title = title;
+        this.timestamp = timestamp;
+    }
+
+    static fromJSON(projectJson){
+        return new Project(projectJson.title, projectJson.timestamp);
     }
 }
 

@@ -43,19 +43,18 @@ class LocalStorage {
     addProjectToDb(project){
       if(!this.$storageAvailable()){
         throw new LocalStorageNotAvailable();
-      }
-      if(localStorage.getItem(project.title)) {
-        return;
       } else {
-        localStorage.setItem(project.title, JSON.stringify([]))
+        localStorage.setItem(project.timestamp, JSON.stringify({project, todos:[]}))
       }
     }
 
     readPojectsFromDb(){
-      const projectNames = Object.keys(localStorage);
+      const projectList = Object.keys(localStorage);
+      projectList.sort((a,b)=>a-b);
       const result = [];
-      for (const item of projectNames){
-        const project = new Project(item);
+      for (const item of projectList){
+        const projectJson = localStorage.getItem(item)
+        const project = Project.fromJSON(projectJson);
         result.push(project);
       }
       return result
