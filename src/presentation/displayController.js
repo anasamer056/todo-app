@@ -4,6 +4,7 @@ import AppController from "../domain/appController";
 import LocalStorage from "../data/localStorage";
 import todoCircle from "../assets/icons/todo-circle.svg"
 import todoInputComponent from "./components/todoInput.html";
+import projectInputComponent from "./components/projectInput.html"
 
 class DisplayController {
     constructor(appController) {
@@ -17,6 +18,7 @@ class DisplayController {
         localStorage.setItem("main", "[]")
         
         this.renderMainContent(new Project("main"));
+        this.renderSidebar();
     }
 
     /**
@@ -63,6 +65,10 @@ class DisplayController {
         parentNode.appendChild(todoWrapper);
     }
 
+    renderSidebar(){
+        this.$appendProjectInputComponent();
+    }
+
     /**
      * Creates form elements and appends them to the `parentNode`
      * @param {Element} parentNode 
@@ -84,6 +90,24 @@ class DisplayController {
             const todo = new Todo(formData.get("title"));
             this.app.addTodoUseCase(project, todo);
             this.renderMainContent(project);
+        });
+    }
+    $appendProjectInputComponent(){
+        // Create form 
+        const projectsContainer = document.querySelector("#projects-container");
+        const addProjectInput = document.createElement("div");
+        addProjectInput.classList.add("btn-to-input");
+        addProjectInput.innerHTML = projectInputComponent;
+        projectsContainer.appendChild(addProjectInput)
+
+        // Attach event listeners
+        const addBtn = document.querySelector(".add-project-btn");
+        const todoForm = document.querySelector(".project-form");
+        addBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            const formData = new FormData(todoForm);
+            const project = new Project(formData.get("title"));
+            this.app.addProjectUseCase(project);
         });
     }
 }

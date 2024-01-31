@@ -5,6 +5,7 @@ class LocalStorage {
     constructor(){
         
     }
+    // -TODO 
     /**
      * Writes a `todo` to the local storage under `project`
      * @param {Project} project 
@@ -36,6 +37,21 @@ class LocalStorage {
       } 
       return result;
     }
+
+    // PROJECT
+    
+    addProjectToDb(project){
+      if(!this.$storageAvailable()){
+        throw new LocalStorageNotAvailable();
+      }
+      if(localStorage.getItem(project.title)) {
+        return;
+      } else {
+        localStorage.setItem(project.title, JSON.stringify([]))
+      }
+    }
+
+    // HELPER
 
     /**
      * Checks whether localStorage is supported and available

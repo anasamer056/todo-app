@@ -199,6 +199,11 @@ body {
     background-color: var(--back-light-black);
 }
 
+#projects-container {
+    padding: 0 var(--sidebar-left-padding);
+
+}
+
 #content {
     background-color: var(--back-light-black);
     padding: 16px;
@@ -219,6 +224,7 @@ body {
             flex:auto;
         }
     }
+
 }
 
 /* TODO */
