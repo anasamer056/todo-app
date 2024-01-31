@@ -15,13 +15,15 @@ class LocalStorage {
         if(!this.$storageAvailable()){
             throw new LocalStorageNotAvailable();
         }
-        
-        if(localStorage.getItem(project.title)){
-            const todoList = JSON.parse(localStorage.getItem(project.title));
+        console.log(localStorage.getItem(project.timestamp))
+        if(localStorage.getItem(project.timestamp)){
+            const parsedData = JSON.parse(localStorage.getItem(project.timestamp));
+            console.log(parsedData);
+            const todoList = parsedData.todoList;
             todoList.push(todo);
-            localStorage.setItem(project.title, JSON.stringify(todoList));
+            localStorage.setItem(project.timestamp, JSON.stringify({project, todoList}));
         } else {
-            localStorage.setItem(project.title, JSON.stringify([todo]));
+            localStorage.setItem(project.timestamp, JSON.stringify({project, toods:[]}));
         }
     }
 
@@ -30,8 +32,9 @@ class LocalStorage {
         throw new ProjectNotFound();
       }
       const parsedData = JSON.parse(localStorage.getItem(project.timestamp));
+      console.log("teestt", parsedData);
       const result = [];
-      for (const item of parsedData.todos){
+      for (const item of parsedData.todoList){
         const todo = new Todo(item.title);
         result.push(todo);
       } 
