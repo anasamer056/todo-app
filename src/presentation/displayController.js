@@ -14,10 +14,9 @@ class DisplayController {
      * Initiates the app upon first loading
      */
     init() {
-        //! The following line will be removed after adding the add-project feature
-        localStorage.setItem("main", "[]")
-        
-        this.renderMainContent(new Project("main"));
+        const mainProject = new Project("main");
+        this.app.addProjectUseCase(mainProject);
+        this.renderMainContent(mainProject);
         this.renderSidebar();
     }
 
