@@ -21,6 +21,10 @@ class AppController {
         this.db.addProjectToDb(project);
     }
 
+    readProjectsUseCase(){
+        return this.db.readPojectsFromDb();
+    }
+
 }
 
 export default AppController;

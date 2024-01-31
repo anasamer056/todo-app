@@ -51,6 +51,16 @@ class LocalStorage {
       }
     }
 
+    readPojectsFromDb(){
+      const projectNames = Object.keys(localStorage);
+      const result = [];
+      for (const item of projectNames){
+        const project = new Project(item);
+        result.push(project);
+      }
+      return result
+    }
+
     // HELPER
 
     /**

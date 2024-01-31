@@ -20,6 +20,8 @@ class DisplayController {
         this.renderSidebar();
     }
 
+    // MAIN CONTENT
+
     /**
      * Renders todos to the main part of the screen based on the `project`
      * @param {Project} project 
@@ -64,10 +66,6 @@ class DisplayController {
         parentNode.appendChild(todoWrapper);
     }
 
-    renderSidebar(){
-        this.$appendProjectInputComponent();
-    }
-
     /**
      * Creates form elements and appends them to the `parentNode`
      * @param {Element} parentNode 
@@ -91,6 +89,26 @@ class DisplayController {
             this.renderMainContent(project);
         });
     }
+    
+    // SIDEBAR 
+
+
+    renderSidebar(){
+        const projectsContainer = document.querySelector("#projects-container")
+        projectsContainer.innerHTML = "";
+        const projects = this.app.readProjectsUseCase();
+        this.$renderProjects(projectsContainer, projects);
+        this.$appendProjectInputComponent();
+    }
+
+    $renderProjects(parentNode, projects){
+        for (const project of projects){
+            const div = document.createElement("div");
+            div.textContent = project.title;
+            parentNode.appendChild(div);
+        }
+    }
+
     $appendProjectInputComponent(){
         // Create form 
         const projectsContainer = document.querySelector("#projects-container");
@@ -107,6 +125,7 @@ class DisplayController {
             const formData = new FormData(todoForm);
             const project = new Project(formData.get("title"));
             this.app.addProjectUseCase(project);
+            this.renderSidebar();
         });
     }
 }
