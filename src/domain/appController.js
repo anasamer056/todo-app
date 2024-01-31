@@ -1,4 +1,5 @@
 import LocalStorage from "../data/localStorage";
+import Project from "./entities/project";
 
 class AppController {
     /**
@@ -23,6 +24,20 @@ class AppController {
 
     readProjectsUseCase(){
         return this.db.readPojectsFromDb();
+    }
+
+    /**
+     * Creates the very first project if it doesn't exist
+     */
+    initProject(){
+        const projects = this.db.readPojectsFromDb();
+        if (projects.length > 0) return projects[0]; 
+        else {
+            const project = new Project("Personal", Date.now())
+            this.db.addProjectToDb(project);
+            return project
+        }
+        
     }
 
 }

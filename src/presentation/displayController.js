@@ -14,9 +14,8 @@ class DisplayController {
      * Initiates the app upon first loading
      */
     init() {
-        const mainProject = new Project("main", Date.now());
-        this.app.addProjectUseCase(mainProject);
-        this.renderMainContent(mainProject);
+        const firstProject = this.app.initProject();
+        this.renderMainContent(firstProject);
         this.renderSidebar();
     }
 
