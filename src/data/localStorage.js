@@ -1,5 +1,6 @@
 import Project from "../domain/entities/project";
 import Todo from "../domain/entities/todo";
+import LocalStorageWrapper from "./entities/localStorageWrapper";
 
 class LocalStorage {
     constructor(){
@@ -20,7 +21,7 @@ class LocalStorage {
         console.log(parsedData);
         const todoList = parsedData.todoList;
         todoList.push(todo);
-        localStorage.setItem(project.timestamp, JSON.stringify({project, todoList}));        
+        localStorage.setItem(project.timestamp, JSON.stringify(new LocalStorageWrapper(project, todoList)));        
     }
 
     readTodosFromDb(project){
@@ -43,7 +44,7 @@ class LocalStorage {
       if(!this.$storageAvailable()){
         throw new LocalStorageNotAvailable();
       } else {
-        localStorage.setItem(project.timestamp, JSON.stringify({project, todos:[]}))
+        localStorage.setItem(project.timestamp, JSON.stringify(new LocalStorageWrapper(project, [])))
       }
     }
 

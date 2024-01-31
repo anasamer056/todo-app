@@ -1,6 +1,7 @@
-class LocalStorageWrapper {
-    constructor(project, todos) {
+export default class LocalStorageWrapper {
+    constructor(project, todoList) {
         this.project = project;
-        this.todos = todos;
+        this.todoList = todoList;
     }
 }
+
