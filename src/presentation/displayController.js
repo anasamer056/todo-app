@@ -85,22 +85,35 @@ class DisplayController {
     $appendTodoInputComponent(parentNode, project) {
         // Create form
         const div = document.createElement("div");
+        
         div.classList.add("btn-to-input");
         div.innerHTML = todoInputComponent;
         parentNode.appendChild(div);
 
+        // SHOW FORM EVENT LISTENER
+        const todoForm = document.querySelector(".todo-form");
+        const showInputBtn = document.querySelector(".show-todo-input");
+        showInputBtn.addEventListener("click", ()=>{
+            console.log("test")
+            showInputBtn.style.display = "None";
+            todoForm.classList.remove("form-invisible");
+            todoForm.classList.add("form-visible");
+        })
+
         // ADD TODO event listener
         const addBtn = document.querySelector(".add-todo-btn");
-        const todoForm = document.querySelector(".todo-form");
         addBtn.addEventListener("click", (e) => {
             e.preventDefault();
+            showInputBtn.style.display = "Block";
             const formData = new FormData(todoForm);
             const todo = new Todo(formData.get("title"));
             this.app.addTodoUseCase(project, todo);
             this.renderMainContent(project);
+            todoForm.classList.add("form-visible");
+            todoForm.classList.remove("form-invisible");
         });
 
-
+        
 
     }
     
@@ -156,12 +169,21 @@ class DisplayController {
         addProjectInput.innerHTML = projectInputComponent;
         projectsContainer.appendChild(addProjectInput)
 
+         // SHOW FORM EVENT LISTENER
+         const projectForm = document.querySelector(".project-form");
+         const showInputBtn = document.querySelector(".show-project-input");
+         showInputBtn.addEventListener("click", ()=>{
+             console.log("test")
+             showInputBtn.style.display = "None";
+             projectForm.classList.remove("form-invisible");
+             projectForm.classList.add("form-visible");
+         })
+
         // Attach event listeners
         const addBtn = document.querySelector(".add-project-btn");
-        const todoForm = document.querySelector(".project-form");
         addBtn.addEventListener("click", (e) => {
             e.preventDefault();
-            const formData = new FormData(todoForm);
+            const formData = new FormData(projectForm);
             const project = new Project(formData.get("title"), Date.now());
             this.app.addProjectUseCase(project);
             this.renderSidebar();

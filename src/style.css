@@ -223,10 +223,6 @@ body {
     margin-top: 16px;
     display: flex;
     flex-direction: column;
-    & form {
-        display: flex;
-        flex-direction: column;
-    }
     & .form-btns {
         display: flex;
         gap: 8px;
@@ -281,3 +277,16 @@ body {
     visibility: visible;
 }
 
+.form-visible{
+    display: flex;
+    flex-direction: column;
+}
+.form-invisible{
+    display: none;
+}
+
+/* .btn-to-input .project-form,
+.btn-to-input .todo-form {
+    display: None;
+    
+} */
