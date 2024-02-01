@@ -1,7 +1,5 @@
 import Project from "../domain/entities/project";
 import Todo from "../domain/entities/todo";
-import AppController from "../domain/appController";
-import LocalStorage from "../data/localStorage";
 import todoCircle from "../assets/icons/todo-circle.svg"
 import todoInputComponent from "./components/todoInput.html";
 import projectInputComponent from "./components/projectInput.html"
