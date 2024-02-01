@@ -56,8 +56,10 @@ class LocalStorage {
     readPojectsFromDb(){
       const projectList = Object.keys(localStorage);
       projectList.sort((a,b)=>a-b);
+      console.log(projectList)
       const result = [];
       for (const item of projectList){
+        console.log("inside")
         const projectJson = localStorage.getItem(item)
         const project = Project.fromJSON(projectJson);
         result.push(project);
