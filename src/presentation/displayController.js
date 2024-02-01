@@ -94,7 +94,6 @@ class DisplayController {
         const todoForm = document.querySelector(".todo-form");
         const showInputBtn = document.querySelector(".show-todo-input");
         showInputBtn.addEventListener("click", ()=>{
-            console.log("test")
             showInputBtn.style.display = "None";
             todoForm.classList.remove("form-invisible");
             todoForm.classList.add("form-visible");
@@ -109,11 +108,16 @@ class DisplayController {
             const todo = new Todo(formData.get("title"));
             this.app.addTodoUseCase(project, todo);
             this.renderMainContent(project);
-            todoForm.classList.add("form-visible");
-            todoForm.classList.remove("form-invisible");
         });
 
-        
+        // CANCEL INPUT EVENT LISTENER
+        const cancelBtn = document.querySelector(".cancel-todo-btn");
+        cancelBtn.addEventListener("click", (e)=>{
+            e.preventDefault();
+            showInputBtn.style.display = "block";
+            todoForm.classList.remove("form-visible");
+            todoForm.classList.add("form-invisible");
+        })
 
     }
     
@@ -173,13 +177,12 @@ class DisplayController {
          const projectForm = document.querySelector(".project-form");
          const showInputBtn = document.querySelector(".show-project-input");
          showInputBtn.addEventListener("click", ()=>{
-             console.log("test")
              showInputBtn.style.display = "None";
              projectForm.classList.remove("form-invisible");
              projectForm.classList.add("form-visible");
          })
 
-        // Attach event listeners
+        // ADD PROJECT EVENT LISTENER
         const addBtn = document.querySelector(".add-project-btn");
         addBtn.addEventListener("click", (e) => {
             e.preventDefault();
@@ -189,6 +192,15 @@ class DisplayController {
             this.renderSidebar();
         }); 
 
+        // CANCEL INPUT EVENT LISTENER
+        const cancelBtn = document.querySelector(".cancel-project-btn");
+        cancelBtn.addEventListener("click", (e)=>{
+            e.preventDefault();
+            showInputBtn.style.display = "block";
+            projectForm.classList.remove("form-visible");
+            projectForm.classList.add("form-invisible");
+        })
+        
 
     }
 }

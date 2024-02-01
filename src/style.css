@@ -48,6 +48,7 @@
     --title-bar-height: 50px;
     --back-black: #161616;
     --back-light-black: #222222;
+    --btn-color: #4a4a4a;
     --light-grey: #bababa;
     --sidebar-left-padding: 18px;
 }
@@ -98,6 +99,8 @@ html {
     padding: var(--spacing-10) var(--spacing-15);
     border-radius: var(--border-radius);
     transition: all 0.15s ease-in-out;
+    color: var(--grey);
+    background-color: var(--btn-color);
 }
 
 .btn:hover {
