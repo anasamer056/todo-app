@@ -200,8 +200,13 @@ body {
 }
 
 #projects-container {
-    padding: 0 var(--sidebar-left-padding);
 
+}
+
+.project-wrapper {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 var(--sidebar-left-padding);
 }
 
 #content {
@@ -260,7 +265,7 @@ body {
     flex: auto;
 }
 
-.close-btn-todo {
+.remove-btn {
     vertical-align: middle;
     visibility: hidden;
     cursor: pointer;
@@ -271,8 +276,8 @@ body {
     font-size: 1.2em;
 }
 
-
-.todo-wrapper:hover .close-btn-todo {
+.todo-wrapper:hover .remove-btn,
+.project-wrapper:hover .remove-btn {
     visibility: visible;
 }
 

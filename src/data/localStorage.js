@@ -18,7 +18,6 @@ class LocalStorage {
         }
 
         const parsedData = JSON.parse(localStorage.getItem(project.timestamp));
-        console.log(parsedData);
         const todoList = parsedData.todoList;
         todoList.push(todo);
         localStorage.setItem(project.timestamp, JSON.stringify(new LocalStorageWrapper(project, todoList)));        
@@ -29,13 +28,19 @@ class LocalStorage {
         throw new ProjectNotFound();
       }
       const parsedData = JSON.parse(localStorage.getItem(project.timestamp));
-      console.log("teestt", parsedData);
       const result = [];
       for (const item of parsedData.todoList){
         const todo = new Todo(item.title);
         result.push(todo);
       } 
       return result;
+    }
+
+    removeTodoFromDb(project, todoIndex){
+      const parsedData = JSON.parse(localStorage.getItem(project.timestamp));
+      const todoList = parsedData.todoList; 
+      todoList.splice(todoIndex, 1);
+      localStorage.setItem(project.timestamp, JSON.stringify(new LocalStorageWrapper(project, todoList)));
     }
 
     // PROJECT
@@ -58,6 +63,10 @@ class LocalStorage {
         result.push(project);
       }
       return result
+    }
+
+    removeProjectFromDb(project){
+      localStorage.removeItem(project.timestamp);  
     }
 
     // HELPER

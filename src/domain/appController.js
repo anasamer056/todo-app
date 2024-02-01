@@ -16,6 +16,9 @@ class AppController {
     readTodosUseCase(project) {
         return this.db.readTodosFromDb(project);
     }
+    removeTodoUseCase(project, todoIndex){
+        this.db.removeTodoFromDb(project, todoIndex);
+    }
 
     // -PROJECT
     addProjectUseCase(project){
@@ -24,6 +27,9 @@ class AppController {
 
     readProjectsUseCase(){
         return this.db.readPojectsFromDb();
+    }
+    removeProjectUseCase(project){
+        this.db.removeProjectFromDb(project);
     }
 
     /**
@@ -37,7 +43,6 @@ class AppController {
             this.db.addProjectToDb(project);
             return project
         }
-        
     }
 
 }

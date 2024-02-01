@@ -36,16 +36,16 @@ class DisplayController {
         todoContainer.classList.add("todo-container");
 
         const todos = this.app.readTodosUseCase(project);
-        for (const todo of todos) {
-            this.$renderTodo(todoContainer, todo);
-        }
+        todos.forEach((todo, i) => {
+            this.$renderTodo(todoContainer, project, todo, i);
+        });
 
         content.appendChild(projectTitleDiv)
         content.appendChild(todoContainer);
         this.$appendTodoInputComponent(content, project);
     }
 
-    $renderTodo(parentNode, todo) {
+    $renderTodo(parentNode, project, todo, todoIndex) {
         // MAIN DIV 
         const todoWrapper = document.createElement("div");
         todoWrapper.classList.add("todo-wrapper");
@@ -62,10 +62,17 @@ class DisplayController {
         // DATE
         todoWrapper.innerHTML += `<div class="todo-date">No date</div>`
 
-        // CLOSE BTN
-        todoWrapper.innerHTML += `<button class="close-btn-todo">
-            ✖
-        </button>`
+        // remove todo btn
+        const removeTodoBtn = document.createElement("button");
+        removeTodoBtn.classList.add("remove-btn")
+        removeTodoBtn.textContent = '✖';
+        removeTodoBtn.addEventListener("click", ()=>{
+            console.log("test")
+            this.app.removeTodoUseCase(project, todoIndex);
+            this.renderMainContent(project);
+        });
+        todoWrapper.appendChild(removeTodoBtn);
+
 
         parentNode.appendChild(todoWrapper);
     }
@@ -82,7 +89,7 @@ class DisplayController {
         div.innerHTML = todoInputComponent;
         parentNode.appendChild(div);
 
-        // Attach event listeners
+        // ADD TODO event listener
         const addBtn = document.querySelector(".add-todo-btn");
         const todoForm = document.querySelector(".todo-form");
         addBtn.addEventListener("click", (e) => {
@@ -92,6 +99,9 @@ class DisplayController {
             this.app.addTodoUseCase(project, todo);
             this.renderMainContent(project);
         });
+
+
+
     }
     
     // SIDEBAR 
@@ -107,9 +117,34 @@ class DisplayController {
 
     $renderProjects(parentNode, projects){
         for (const project of projects){
-            const div = document.createElement("div");
-            div.textContent = project.title;
-            parentNode.appendChild(div);
+            // MAIN WRAPPER
+            const projectWrapper = document.createElement("div");
+            projectWrapper.classList.add("list-item", "project-wrapper");
+
+            // TITLE
+            const title = document.createElement("div");
+            title.textContent = project.title;
+            projectWrapper.appendChild(title);
+
+            // REMOVE PROJECT BTN
+            const removeProjectBtn = document.createElement("div");
+            removeProjectBtn.textContent = '✖';
+            removeProjectBtn.classList.add("remove-btn")
+            removeProjectBtn.addEventListener("click", ()=>{
+                this.app.removeProjectUseCase(project);
+
+                this.renderSidebar()
+            })
+            projectWrapper.appendChild(removeProjectBtn);
+            
+
+            // RENDER PROJECT EVENT LISTENER 
+            projectWrapper.addEventListener("click", ()=> {
+                this.renderMainContent(project);
+            })
+        
+
+            parentNode.appendChild(projectWrapper);
         }
     }
 
@@ -130,7 +165,9 @@ class DisplayController {
             const project = new Project(formData.get("title"), Date.now());
             this.app.addProjectUseCase(project);
             this.renderSidebar();
-        });
+        }); 
+
+
     }
 }
 export default DisplayController;
