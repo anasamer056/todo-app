@@ -75,7 +75,8 @@ class DisplayController {
         todoWrapper.appendChild(removeTodoBtn);
 
         // UPDATE TODO EVENT LISTNER
-        todoWrapper.addEventListener("click", () => {
+        todoWrapper.addEventListener("click", (e) => {
+            if (e.target.classList.contains("remove-btn")) return;
             this.renderTodoInputModal();
             const dialog = document.querySelector(".update-todo");
             dialog.showModal();
