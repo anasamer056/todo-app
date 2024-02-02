@@ -1,7 +1,10 @@
 import Project from "../domain/entities/project";
 import Todo from "../domain/entities/todo";
 import todoCircle from "../assets/icons/todo-circle.svg"
-import todoInputComponent from "./components/todoInput.html";
+import showTodoBtn from "./components/todoInput/showTodoBtn.html"
+import todoInputComponent from "./components/todoInput/todoInput.html";
+import todoFromBtns from "./components/todoInput/todoFormBtns.html";
+import updateTodoBtns from "./components/todoInput/updateTodoBtns.html";
 import projectInputComponent from "./components/projectInput.html"
 
 class DisplayController {
@@ -29,7 +32,7 @@ class DisplayController {
 
         const projectTitleDiv = document.createElement("h3");
         projectTitleDiv.textContent = project.title;
-        
+
         const todoContainer = document.createElement("div");
         todoContainer.classList.add("todo-container");
 
@@ -64,13 +67,38 @@ class DisplayController {
         const removeTodoBtn = document.createElement("button");
         removeTodoBtn.classList.add("remove-btn")
         removeTodoBtn.textContent = '✖';
-        removeTodoBtn.addEventListener("click", ()=>{
+        removeTodoBtn.addEventListener("click", () => {
             console.log("test")
             this.app.removeTodoUseCase(project, todoIndex);
             this.renderMainContent(project);
         });
         todoWrapper.appendChild(removeTodoBtn);
 
+        // UPDATE TODO EVENT LISTNER
+        todoWrapper.addEventListener("click", () => {
+            this.renderTodoInputModal();
+            const dialog = document.querySelector(".update-todo");
+            dialog.showModal();
+            const titleInput = document.querySelector(".update-todo #title");
+            titleInput.value = todo.title;
+
+            const cancelBtn = document.querySelector(".cancel-update-btn");
+            console.log(cancelBtn)
+
+            cancelBtn.addEventListener("click", (e) => {
+                e.preventDefault();
+                dialog.close();
+            })
+
+            const updateBtn = document.querySelector(".update-todo-btn");
+            updateBtn.addEventListener("click", ()=>{
+                const form = document.querySelector("dialog form");
+                const data = new FormData(form);
+                const newTodo = new Todo(data.get("title"));
+                this.app.updateTodoUseCase(project, todoIndex, newTodo)
+                this.renderMainContent(project);
+            })
+        })
 
         parentNode.appendChild(todoWrapper);
     }
@@ -83,15 +111,16 @@ class DisplayController {
     $appendTodoInputComponent(parentNode, project) {
         // Create form
         const div = document.createElement("div");
-        
+
         div.classList.add("btn-to-input");
-        div.innerHTML = todoInputComponent;
+        div.innerHTML = showTodoBtn + todoInputComponent;
         parentNode.appendChild(div);
+        document.querySelector(".todo-form").innerHTML += todoFromBtns;
 
         // SHOW FORM EVENT LISTENER
         const todoForm = document.querySelector(".todo-form");
         const showInputBtn = document.querySelector(".show-todo-input");
-        showInputBtn.addEventListener("click", ()=>{
+        showInputBtn.addEventListener("click", () => {
             showInputBtn.style.display = "None";
             todoForm.classList.remove("form-invisible");
             todoForm.classList.add("form-visible");
@@ -110,7 +139,7 @@ class DisplayController {
 
         // CANCEL INPUT EVENT LISTENER
         const cancelBtn = document.querySelector(".cancel-todo-btn");
-        cancelBtn.addEventListener("click", (e)=>{
+        cancelBtn.addEventListener("click", (e) => {
             e.preventDefault();
             showInputBtn.style.display = "block";
             todoForm.classList.remove("form-visible");
@@ -118,11 +147,11 @@ class DisplayController {
         })
 
     }
-    
+
     // SIDEBAR 
 
 
-    renderSidebar(){
+    renderSidebar() {
         const projectsContainer = document.querySelector("#projects-container")
         projectsContainer.innerHTML = "";
         const projects = this.app.readProjectsUseCase();
@@ -130,8 +159,8 @@ class DisplayController {
         this.$appendProjectInputComponent();
     }
 
-    $renderProjects(parentNode, projects){
-        for (const project of projects){
+    $renderProjects(parentNode, projects) {
+        for (const project of projects) {
             // MAIN WRAPPER
             const projectWrapper = document.createElement("div");
             projectWrapper.classList.add("list-item", "project-wrapper");
@@ -145,25 +174,25 @@ class DisplayController {
             const removeProjectBtn = document.createElement("div");
             removeProjectBtn.textContent = '✖';
             removeProjectBtn.classList.add("remove-btn")
-            removeProjectBtn.addEventListener("click", ()=>{
+            removeProjectBtn.addEventListener("click", () => {
                 this.app.removeProjectUseCase(project);
 
                 this.renderSidebar()
             })
             projectWrapper.appendChild(removeProjectBtn);
-            
+
 
             // RENDER PROJECT EVENT LISTENER 
-            projectWrapper.addEventListener("click", ()=> {
+            projectWrapper.addEventListener("click", () => {
                 this.renderMainContent(project);
             })
-        
+
 
             parentNode.appendChild(projectWrapper);
         }
     }
 
-    $appendProjectInputComponent(){
+    $appendProjectInputComponent() {
         // Create form 
         const projectsContainer = document.querySelector("#projects-container");
         const addProjectInput = document.createElement("div");
@@ -171,14 +200,14 @@ class DisplayController {
         addProjectInput.innerHTML = projectInputComponent;
         projectsContainer.appendChild(addProjectInput)
 
-         // SHOW FORM EVENT LISTENER
-         const projectForm = document.querySelector(".project-form");
-         const showInputBtn = document.querySelector(".show-project-input");
-         showInputBtn.addEventListener("click", ()=>{
-             showInputBtn.style.display = "None";
-             projectForm.classList.remove("form-invisible");
-             projectForm.classList.add("form-visible");
-         })
+        // SHOW FORM EVENT LISTENER
+        const projectForm = document.querySelector(".project-form");
+        const showInputBtn = document.querySelector(".show-project-input");
+        showInputBtn.addEventListener("click", () => {
+            showInputBtn.style.display = "None";
+            projectForm.classList.remove("form-invisible");
+            projectForm.classList.add("form-visible");
+        })
 
         // ADD PROJECT EVENT LISTENER
         const addBtn = document.querySelector(".add-project-btn");
@@ -188,17 +217,27 @@ class DisplayController {
             const project = new Project(formData.get("title"), Date.now());
             this.app.addProjectUseCase(project);
             this.renderSidebar();
-        }); 
+        });
 
         // CANCEL INPUT EVENT LISTENER
         const cancelBtn = document.querySelector(".cancel-project-btn");
-        cancelBtn.addEventListener("click", (e)=>{
+        cancelBtn.addEventListener("click", (e) => {
             e.preventDefault();
             showInputBtn.style.display = "block";
             projectForm.classList.remove("form-visible");
             projectForm.classList.add("form-invisible");
         })
-        
+    }
+
+    // DIALOG
+    renderTodoInputModal() {
+        const dialog = document.querySelector(".update-todo")
+        const formWrapper = document.querySelector(".update-todo>div");
+        formWrapper.innerHTML = todoInputComponent;
+        const form = document.querySelector(".update-todo .todo-form");
+        form.innerHTML += updateTodoBtns;
+        form.classList.remove("form-invisible");
+        form.classList.add("form-visible");
 
     }
 }

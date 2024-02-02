@@ -43,6 +43,14 @@ class LocalStorage {
       localStorage.setItem(project.timestamp, JSON.stringify(new LocalStorageWrapper(project, todoList)));
     }
 
+    updateTodoInDb(project, todoIndex, newTodo){
+
+      const parsedData = JSON.parse(localStorage.getItem(project.timestamp));
+      const todoList = parsedData.todoList;
+      todoList[todoIndex] = newTodo;
+      localStorage.setItem(project.timestamp, JSON.stringify(new LocalStorageWrapper(project, todoList))); 
+    }
+
     // PROJECT
     
     addProjectToDb(project){

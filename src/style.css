@@ -65,7 +65,10 @@
 
 html {
     font-family: 'Poppins', sans-serif;
+
 }
+
+
 
 
 /* UTILITY */
@@ -241,6 +244,7 @@ body {
     display: flex;
     gap: 8px;
     align-items: center;
+    cursor: pointer;
 }
 .todo-circle {
     position: relative;
@@ -288,8 +292,7 @@ body {
     display: none;
 }
 
-/* .btn-to-input .project-form,
-.btn-to-input .todo-form {
-    display: None;
-    
-} */
+.update-todo{
+    margin: auto;
+    padding: 12px;
+}
