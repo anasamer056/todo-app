@@ -229,9 +229,17 @@ body {
     
 }
 .priority {
-    background-color: red;
     width: 5px;
     min-height: 100%;
+}
+.priority.high {
+    background-color: red;
+}
+.priority.low {
+    background-color: rgb(75, 219, 75);
+}
+.priority.medium {
+    background-color: yellow;
 }
 
 .project-wrapper {
@@ -270,11 +278,14 @@ body {
 /* TODO */
 .todo-wrapper {
     display: flex;
-    gap: 8px;
     cursor: pointer;
-    & div {
-        vertical-align: middle;
-    }
+ 
+}
+.todo-details {
+    display: flex;
+    flex: auto;
+    gap: 8px;
+    align-items: center;
 }
 
 .todo-circle {
@@ -297,6 +308,9 @@ body {
 }
 .todo-title{
     flex: auto;
+}
+input[type="date"] {
+    min-width: 120px;
 }
 
 .remove-btn {

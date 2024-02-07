@@ -49,25 +49,29 @@ class DisplayController {
     $renderTodo(parentNode, project, todo, todoIndex) {
         // MAIN DIV 
         const todoWrapper = document.createElement("div");
-        todoWrapper.classList.add("todo-wrapper");
+        todoWrapper.classList.add("todo-wrapper")
+
+        const todoDetails = document.createElement("div");
+        todoDetails.classList.add("todo-details");
 
         // PRIORITY FLAG
         const priority = document.createElement("div");
-        priority.classList.add("priority");
-        todoWrapper.appendChild(priority);
         
+        priority.classList.add("priority", todo.priority);
+        
+        todoDetails.appendChild(priority);
 
         // CHECKBOX
         const svgWrapper = document.createElement("div");
         svgWrapper.classList.add("todo-circle");
         svgWrapper.innerHTML = todoCircle
-        todoWrapper.appendChild(svgWrapper);
+        todoDetails.appendChild(svgWrapper);
 
         // TITLE
-        todoWrapper.innerHTML += `<div class="todo-title">${todo.title}</div>`
+        todoDetails.innerHTML += `<div class="todo-title">${todo.title}</div>`
 
         // DATE
-        todoWrapper.innerHTML += `<div class="todo-date">${this.renderTodoDate(todo)}</div>`
+        todoDetails.innerHTML += `<div class="todo-date">${this.renderTodoDate(todo)}</div>`
 
         // remove todo btn
         const removeTodoBtn = document.createElement("button");
@@ -78,16 +82,20 @@ class DisplayController {
             this.app.removeTodoUseCase(project, todoIndex);
             this.renderMainContent(project);
         });
-        todoWrapper.appendChild(removeTodoBtn);
+        todoDetails.appendChild(removeTodoBtn);
 
         // UPDATE TODO EVENT LISTNER
-        todoWrapper.addEventListener("click", (e) => {
+        todoDetails.addEventListener("click", (e) => {
             if (e.target.classList.contains("remove-btn")) return;
             this.renderTodoInputModal();
             const dialog = document.querySelector(".update-todo");
             dialog.showModal();
             const titleInput = document.querySelector(".update-todo #title");
             titleInput.value = todo.title;
+            const dueDateInput = document.querySelector(".update-todo #due-date");
+            dueDateInput.value = todo.dueDate.toISOString().substring(0,10);
+            const priority = document.querySelector(".update-todo #priority");
+            priority.value = todo.priority
 
             const cancelBtn = document.querySelector(".cancel-update-btn");
             console.log(cancelBtn)
@@ -101,12 +109,12 @@ class DisplayController {
             updateBtn.addEventListener("click", ()=>{
                 const form = document.querySelector("dialog form");
                 const data = new FormData(form);
-                const newTodo = new Todo(data.get("title"));
+                const newTodo = new Todo(data.get("title"), data.get("due-date"), data.get("priority"));
                 this.app.updateTodoUseCase(project, todoIndex, newTodo)
                 this.renderMainContent(project);
             })
         })
-
+        todoWrapper.appendChild(todoDetails);
         parentNode.appendChild(todoWrapper);
     }
 
