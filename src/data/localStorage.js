@@ -28,12 +28,7 @@ class LocalStorage {
         throw new ProjectNotFound();
       }
       const parsedData = JSON.parse(localStorage.getItem(project.timestamp));
-      const result = [];
-      for (const item of parsedData.todoList){
-        const todo = new Todo(item.title);
-        result.push(todo);
-      } 
-      return result;
+      return Todo.parseTodoList(parsedData.todoList);
     }
 
     removeTodoFromDb(project, todoIndex){

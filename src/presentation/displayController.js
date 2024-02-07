@@ -61,7 +61,7 @@ class DisplayController {
         todoWrapper.innerHTML += `<div class="todo-title">${todo.title}</div>`
 
         // DATE
-        todoWrapper.innerHTML += `<div class="todo-date">No date</div>`
+        todoWrapper.innerHTML += `<div class="todo-date">${todo.dueDate.toLocaleDateString()}</div>`
 
         // remove todo btn
         const removeTodoBtn = document.createElement("button");
@@ -133,7 +133,7 @@ class DisplayController {
             e.preventDefault();
             showInputBtn.style.display = "Block";
             const formData = new FormData(todoForm);
-            const todo = new Todo(formData.get("title"));
+            const todo = new Todo(formData.get("title"), formData.get("due-date"), formData.get("priority"));
             this.app.addTodoUseCase(project, todo);
             this.renderMainContent(project);
         });
