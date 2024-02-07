@@ -51,6 +51,12 @@ class DisplayController {
         const todoWrapper = document.createElement("div");
         todoWrapper.classList.add("todo-wrapper");
 
+        // PRIORITY FLAG
+        const priority = document.createElement("div");
+        priority.classList.add("priority");
+        todoWrapper.appendChild(priority);
+        
+
         // CHECKBOX
         const svgWrapper = document.createElement("div");
         svgWrapper.classList.add("todo-circle");

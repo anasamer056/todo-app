@@ -228,6 +228,11 @@ body {
     padding: 12px;
     
 }
+.priority {
+    background-color: red;
+    width: 5px;
+    min-height: 100%;
+}
 
 .project-wrapper {
     display: flex;
@@ -243,6 +248,9 @@ body {
 .todo-container {
     padding: 20px;
     padding-bottom: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
 }
 
 .btn-to-input {
@@ -263,9 +271,12 @@ body {
 .todo-wrapper {
     display: flex;
     gap: 8px;
-    align-items: center;
     cursor: pointer;
+    & div {
+        vertical-align: middle;
+    }
 }
+
 .todo-circle {
     position: relative;
     cursor: pointer;
