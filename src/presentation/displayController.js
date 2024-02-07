@@ -61,7 +61,7 @@ class DisplayController {
         todoWrapper.innerHTML += `<div class="todo-title">${todo.title}</div>`
 
         // DATE
-        todoWrapper.innerHTML += `<div class="todo-date">${todo.dueDate.toLocaleDateString()}</div>`
+        todoWrapper.innerHTML += `<div class="todo-date">${this.renderTodoDate(todo)}</div>`
 
         // remove todo btn
         const removeTodoBtn = document.createElement("button");
@@ -102,6 +102,13 @@ class DisplayController {
         })
 
         parentNode.appendChild(todoWrapper);
+    }
+
+    renderTodoDate(todo){
+        if (todo.dueDate.getFullYear() === new Date().getFullYear()){
+            return todo.dueDate.toLocaleString('default', { month: 'short', day:"numeric" });
+        }
+        else return todo.dueDate.toLocaleString('default', { month: 'short', day:"numeric" , year: "numeric"});
     }
 
     /**
