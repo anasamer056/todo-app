@@ -50,6 +50,7 @@
     --back-light-black: #222222;
     --btn-color: #4a4a4a;
     --light-grey: #bababa;
+    --transparent-grey: rgba(186, 186, 186, 0.3);
     --sidebar-left-padding: 18px;
 }
 
@@ -219,6 +220,13 @@ body {
 
 #projects-container {
 
+}
+
+.todo-form {
+    border: 3px solid var(--transparent-grey);
+    border-radius: 10px;
+    padding: 12px;
+    
 }
 
 .project-wrapper {
