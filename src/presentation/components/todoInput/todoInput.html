@@ -1,3 +1,16 @@
 <form class="todo-form form-invisible">
-    <input id="title" name="title" type="text" placeholder="Your todo goes here">
+    <div class="form-item">
+        <label for="title">Title: </label>
+        <input id="title" name="title" type="text">
+    </div>
+    <div class="form-item">
+        <label for="due-date">Due date:</label>
+        <input type="date" name="due-date" id="due-date">
+        <label for="priority">Priority</label>
+        <select name="priority" id="priority">
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+        </select>
+    </div>
 </form>

@@ -93,6 +93,18 @@ html {
     align-items: center;
 }
 
+.form-item {
+    display: flex;
+    gap: 12px;
+    > input ,
+    > select {
+        flex: 1 1 100%;
+    }
+    > label {
+        white-space: nowrap;
+    }
+
+}
 
 
 .btn {
