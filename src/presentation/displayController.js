@@ -6,6 +6,7 @@ import todoInputComponent from "./components/todoInput/todoInput.html";
 import todoFromBtns from "./components/todoInput/todoFormBtns.html";
 import updateTodoBtns from "./components/todoInput/updateTodoBtns.html";
 import projectInputComponent from "./components/projectInput.html"
+import { getCurrentDateString } from "../domain/helper.js";
 
 class DisplayController {
     constructor(appController) {
@@ -125,6 +126,8 @@ class DisplayController {
         else return todo.dueDate.toLocaleString('default', { month: 'short', day:"numeric" , year: "numeric"});
     }
 
+   
+
     /**
      * Creates form elements and appends them to the `parentNode`
      * @param {Element} parentNode 
@@ -138,6 +141,9 @@ class DisplayController {
         div.innerHTML = showTodoBtn + todoInputComponent;
         parentNode.appendChild(div);
         document.querySelector(".todo-form").innerHTML += todoFromBtns;
+        console.log(getCurrentDateString())
+        document.querySelector(".todo-form #due-date").value = getCurrentDateString();
+
 
         // SHOW FORM EVENT LISTENER
         const todoForm = document.querySelector(".todo-form");
