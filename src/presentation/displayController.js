@@ -6,7 +6,7 @@ import todoInputComponent from "./components/todoInput/todoInput.html";
 import todoFromBtns from "./components/todoInput/todoFormBtns.html";
 import updateTodoBtns from "./components/todoInput/updateTodoBtns.html";
 import projectInputComponent from "./components/projectInput.html"
-import { getCurrentDateString } from "../domain/helper.js";
+import { getCurrentDateString, capitalize } from "../domain/helper.js";
 
 class DisplayController {
     constructor(appController) {
@@ -134,16 +134,16 @@ class DisplayController {
      * @param {Project} project 
      */
     $appendTodoInputComponent(parentNode, project) {
-        // Create form
+        // CREATE FORM
         const div = document.createElement("div");
-
         div.classList.add("btn-to-input");
         div.innerHTML = showTodoBtn + todoInputComponent;
         parentNode.appendChild(div);
         document.querySelector(".todo-form").innerHTML += todoFromBtns;
-        console.log(getCurrentDateString())
         document.querySelector(".todo-form #due-date").value = getCurrentDateString();
-
+        
+        // POPULATE SELECT TAG FOR PROJECT NAMES
+        this.addProjectsToTodoForm(project);
 
         // SHOW FORM EVENT LISTENER
         const todoForm = document.querySelector(".todo-form");
@@ -161,7 +161,10 @@ class DisplayController {
             showInputBtn.style.display = "Block";
             const formData = new FormData(todoForm);
             const todo = new Todo(formData.get("title"), formData.get("due-date"), formData.get("priority"));
-            this.app.addTodoUseCase(project, todo);
+            const allProjects = this.app.readProjectsUseCase();
+            const selectedProject = allProjects[formData.get("project")];
+            
+            this.app.addTodoUseCase(selectedProject, todo);
             this.renderMainContent(project);
         });
 
@@ -174,6 +177,21 @@ class DisplayController {
             todoForm.classList.add("form-invisible");
         })
 
+    }
+    addProjectsToTodoForm(renderedProject){
+        const projectSelect = document.querySelector("select#project");
+        const projectsList = this.app.readProjectsUseCase();
+        projectsList.forEach((project, i)=> {
+            const option = document.createElement("option");
+            option.textContent = capitalize(project.title);
+            option.value = i;
+            // Select project if it's the currently rendered project
+            if (project.timestamp === renderedProject.timestamp){
+                console.log(project)
+                option.setAttribute("selected", "selected");
+            }
+            projectSelect.appendChild(option);
+        })
     }
 
     // SIDEBAR 

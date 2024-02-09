@@ -31,6 +31,7 @@ class AppController {
     readProjectsUseCase(){
         return this.db.readPojectsFromDb();
     }
+    
     removeProjectUseCase(project){
         this.db.removeProjectFromDb(project);
     }
