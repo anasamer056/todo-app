@@ -7,6 +7,7 @@ import todoFromBtns from "./components/todoInput/todoFormBtns.html";
 import updateTodoBtns from "./components/todoInput/updateTodoBtns.html";
 import projectInputComponent from "./components/projectInput.html"
 import { getCurrentDateString, capitalize } from "../domain/helper.js";
+import SidebarController from "./sidebarController.js";
 
 class DisplayController {
     constructor(appController) {
@@ -19,6 +20,8 @@ class DisplayController {
         const firstProject = this.app.initProject();
         this.renderMainContent(firstProject);
         this.renderSidebar();
+        SidebarController.enableAll();
+
     }
 
     // MAIN CONTENT
@@ -28,6 +31,10 @@ class DisplayController {
      * @param {Project} project 
      */
     renderMainContent(project) {
+        this.renderMainContentDetails(project);
+        this.$appendTodoInputComponent(content, project);
+    }
+    renderMainContentDetails(project){
         const content = document.querySelector("#content");
         content.innerHTML = '';
 
@@ -44,7 +51,6 @@ class DisplayController {
 
         content.appendChild(projectTitleDiv)
         content.appendChild(todoContainer);
-        this.$appendTodoInputComponent(content, project);
     }
 
     $renderTodo(parentNode, project, todo, todoIndex) {
