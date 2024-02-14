@@ -7,7 +7,6 @@ import todoFromBtns from "./components/todoInput/todoFormBtns.html";
 import updateTodoBtns from "./components/todoInput/updateTodoBtns.html";
 import projectInputComponent from "./components/projectInput.html"
 import { getCurrentDateString, capitalize } from "../domain/helper.js";
-import SidebarController from "./sidebarController.js";
 
 class DisplayController {
     constructor(appController) {
@@ -18,9 +17,9 @@ class DisplayController {
      */
     init() {
         const firstProject = this.app.initProject();
-        this.renderMainContent(firstProject);
         this.renderSidebar();
-        SidebarController.enableAll();
+        this.renderMainContent(firstProject);
+        
 
     }
 
@@ -31,15 +30,15 @@ class DisplayController {
      * @param {Project} project 
      */
     renderMainContent(project) {
-        this.renderMainContentDetails(project);
+        const content = document.querySelector("#content");
+        this.renderMainContentDetails(content, project);
         this.$appendTodoInputComponent(content, project);
     }
-    renderMainContentDetails(project){
-        const content = document.querySelector("#content");
-        content.innerHTML = '';
+    renderMainContentDetails(parentNode, project){
+        parentNode.innerHTML = '';
 
         const projectTitleDiv = document.createElement("h3");
-        projectTitleDiv.textContent = project.title;
+        projectTitleDiv.textContent = "List: " + project.title;
 
         const todoContainer = document.createElement("div");
         todoContainer.classList.add("todo-container");
@@ -49,8 +48,8 @@ class DisplayController {
             this.$renderTodo(todoContainer, project, todo, i);
         });
 
-        content.appendChild(projectTitleDiv)
-        content.appendChild(todoContainer);
+        parentNode.appendChild(projectTitleDiv)
+        parentNode.appendChild(todoContainer);
     }
 
     $renderTodo(parentNode, project, todo, todoIndex) {
@@ -209,6 +208,7 @@ class DisplayController {
         const projects = this.app.readProjectsUseCase();
         this.$renderProjects(projectsContainer, projects);
         this.$appendProjectInputComponent();
+        this.enableAllSidebarFeatures();
     }
 
     $renderProjects(parentNode, projects) {
@@ -290,7 +290,47 @@ class DisplayController {
         form.innerHTML += updateTodoBtns;
         form.classList.remove("form-invisible");
         form.classList.add("form-visible");
+    }
 
+    //Sidebar 
+    enableAllSidebarFeatures(){
+        this.enableAllTasksView();
+    }
+
+    enableAllTasksView(){
+        const content = document.querySelector("#content");
+        const projectsWrapper = document.createElement("div");
+        projectsWrapper.classList.add("projects-wrapper");
+        const projects = this.app.readProjectsUseCase();
+        const allTasks = document.querySelector("#all-tasks");
+        allTasks.addEventListener("click", ()=>{
+            this.renderAllTasks();
+            this.$appendTodoInputComponent(content, projects[0])
+            this.overrideAddTodoEventListener()
+        })
+    }
+    renderAllTasks(){
+        const content = document.querySelector("#content");
+        const projectsWrapper = document.createElement("div");
+        projectsWrapper.classList.add("projects-wrapper");
+        content.innerHTML = "";
+        projectsWrapper.innerHTML = "";
+        const projects = this.app.readProjectsUseCase();
+        projects.forEach((project)=>{
+            const projectContainer = document.createElement("div")
+            this.renderMainContentDetails(projectContainer, project);
+            projectsWrapper.appendChild(projectContainer)
+        })
+        content.appendChild(projectsWrapper);
+    }
+    overrideAddTodoEventListener(){
+        const projects = this.app.readProjectsUseCase();
+        const addBtn = document.querySelector(".add-todo-btn");
+        addBtn.addEventListener("click", ()=>{
+            console.log("overrriden")
+            this.renderAllTasks();
+            this.$appendTodoInputComponent(content, projects[0])
+        })
     }
 }
 export default DisplayController;

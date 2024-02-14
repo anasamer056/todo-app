@@ -255,7 +255,6 @@ body {
 
 .todo-container {
     padding: 20px;
-    padding-bottom: 5px;
     display: flex;
     flex-direction: column;
     gap: 3px;
