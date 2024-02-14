@@ -1,5 +1,6 @@
 import LocalStorage from "../data/localStorage";
 import Project from "./entities/project";
+import { sortTodosByDateAsc } from "./helper";
 
 class AppController {
     /**
@@ -14,8 +15,10 @@ class AppController {
         this.db.addTodoToDb(project, todo); 
     }
     readTodosUseCase(project) {
-        return this.db.readTodosFromDb(project);
+        console.log("Here");
+        return sortTodosByDateAsc(this.db.readTodosFromDb(project));
     }
+    
     removeTodoUseCase(project, todoIndex){
         this.db.removeTodoFromDb(project, todoIndex);
     }
