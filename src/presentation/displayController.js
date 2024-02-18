@@ -303,11 +303,27 @@ class DisplayController {
     enableAllSidebarFeatures(){
         const allTasks = document.querySelector("#all-tasks");
         allTasks.addEventListener("click", this.renderAllTasks.bind(this));
+
+        const weekTasks = document.querySelector("#week-tasks");
+        weekTasks.addEventListener("click", this.renderWeekTasks.bind(this));
+
+        const todayTasks = document.querySelector("#today-tasks");
+        todayTasks.addEventListener("click", this.renderTodayTasks.bind(this))
     }
 
     renderAllTasks(){
         const projects = this.app.readProjectsUseCase();
         this.renderSummaryTasks(projects);
+    }
+    renderWeekTasks(){
+        const content = document.querySelector("#content");
+        content.innerHTML = "";
+        content.textContent = "To be implemented"
+    }
+    renderTodayTasks(){
+        const content = document.querySelector("#content");
+        content.innerHTML = "";
+        content.textContent = "To be implemented"
     }
 
     renderSummaryTasks(projects){

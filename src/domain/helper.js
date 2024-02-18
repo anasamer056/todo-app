@@ -16,4 +16,16 @@ function sortTodosByDateAsc(todoList){
     return todoList.sort((a,b)=>compareAsc(a.dueDate, b.dueDate));
 }
 
-export {getCurrentDateString, capitalize, sortTodosByDateAsc};
+function filterCurrentWeekTodos(projects){
+    const today = new Date()
+    const oneWeekFromNow = new Date(today);
+
+    projects.forEach((project)=>{
+        project
+    })
+    oneWeekFromNow.setDate(today.getDate() + 7);
+    todos.filter((todo)=>todo.dueDate < oneWeekFromNow);
+}
+
+
+export {getCurrentDateString, capitalize, sortTodosByDateAsc, filterCurrentWeekTodos};
