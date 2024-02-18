@@ -115,8 +115,9 @@ class DisplayController {
                 const form = document.querySelector("dialog form");
                 const data = new FormData(form);
                 const newTodo = new Todo(data.get("title"), data.get("due-date"), data.get("priority"));
-                this.app.updateTodoUseCase(project, todoIndex, newTodo)
-                this.renderMainContent(project);
+                const newProject = this.app.updateTodoUseCase(project, todoIndex, newTodo)
+                
+                this.renderActiveView(newProject);
             })
         })
         todoWrapper.appendChild(todoDetails);
@@ -170,17 +171,8 @@ class DisplayController {
                 const selectedProject = allProjects[formData.get("project")];
                 console.log("here")
                 const newProject = this.app.addTodoUseCase(selectedProject, todo);
-                const content = document.querySelector("#content");
-                if (content.classList.length === 0) {
-                    this.renderMainContent(newProject);
-                } else if(content.classList.contains("all-tasks")){
-                    this.renderAllTasks();
-                } else if(content.classList.contains("week-tasks")){
-                    this.renderWeekTasks();
-                } else if(content.classList.contains("today-tasks")){
-                    this.renderTodayTasks();
-                }
-                this.renderSidebar();
+                
+                this.renderActiveView(newProject);
             });
       
         // CANCEL INPUT EVENT LISTENER
@@ -193,6 +185,22 @@ class DisplayController {
         })
 
     }
+    renderActiveView(newProject){
+        const content = document.querySelector("#content");
+
+        if (content.classList.length === 0) {
+            this.renderMainContent(newProject);
+        } else if(content.classList.contains("all-tasks")){
+            this.renderAllTasks();
+        } else if(content.classList.contains("week-tasks")){
+            this.renderWeekTasks();
+        } else if(content.classList.contains("today-tasks")){
+            this.renderTodayTasks();
+        }
+        this.renderSidebar();
+    }
+
+
     addProjectsToTodoForm(renderedProject){
         
         const projectSelect = document.querySelector("select#project");

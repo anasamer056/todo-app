@@ -25,7 +25,7 @@ class AppController {
         this.db.removeTodoFromDb(project, todoIndex);
     }
     updateTodoUseCase(project, todoIndex, newTodo){
-        this.db.updateTodoInDb(project, todoIndex, newTodo);
+        return this.db.updateTodoInDb(project, todoIndex, newTodo);
     }
 
     // -PROJECT

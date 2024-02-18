@@ -29,6 +29,7 @@ class LocalStorage {
     updateTodoInDb(project, todoIndex, newTodo){
       project.todos[todoIndex] = newTodo;
       localStorage.setItem(project.timestamp, JSON.stringify(project)); 
+      return project;
     }
 
     // PROJECT

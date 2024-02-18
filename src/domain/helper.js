@@ -25,19 +25,28 @@ function filterCurrentWeekTodos(projects) {
     const oneWeekFromNow = new Date(today);
     oneWeekFromNow.setDate(today.getDate() + 7);
 
-    projects.forEach((project) => {
+    projects.forEach((project, i) => {
         project.todos = project.todos.filter((todo) => todo.dueDate < oneWeekFromNow);
+
+        if (project.todos.length === 0){
+            projects.splice(i,1);
+        }
     })
     return projects;
 }
 
 function filterTodayTodos(projects) {
     const today = new Date();
-    projects.forEach((project) => {
+    projects.forEach((project, i) => {
         project.todos = project.todos.filter((todo) => todo.dueDate.toDateString() === today.toDateString());
+        
+        if (project.todos.length === 0){
+            projects.splice(i,1);
+        }
     })
     return projects;
 }
+
 
 
 export { getCurrentDateString, capitalize, sortTodosByDateAsc, filterCurrentWeekTodos, filterTodayTodos };
