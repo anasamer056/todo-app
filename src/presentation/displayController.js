@@ -138,7 +138,7 @@ class DisplayController {
      * @param {Element} parentNode 
      * @param {Project} project 
      */
-    $appendTodoInputComponent(parentNode, project) {
+    $appendTodoInputComponent(parentNode, project, addBtnEventHandler) {
         // CREATE FORM
         const div = document.createElement("div");
         div.classList.add("btn-to-input");
@@ -161,18 +161,19 @@ class DisplayController {
 
         // ADD TODO event listener
         const addBtn = document.querySelector(".add-todo-btn");
-        addBtn.addEventListener("click", (e) => {
-            e.preventDefault();
-            showInputBtn.style.display = "Block";
-            const formData = new FormData(todoForm);
-            const todo = new Todo(formData.get("title"), formData.get("due-date"), formData.get("priority"));
-            const allProjects = this.app.readProjectsUseCase();
-            const selectedProject = allProjects[formData.get("project")];
-            
-            this.app.addTodoUseCase(selectedProject, todo);
-            this.renderMainContent(project);
-        });
-
+            addBtn.addEventListener("click", (e) => {
+                e.preventDefault();
+                showInputBtn.style.display = "Block";
+                const formData = new FormData(todoForm);
+                const todo = new Todo(formData.get("title"), formData.get("due-date"), formData.get("priority"));
+                const allProjects = this.app.readProjectsUseCase();
+                const selectedProject = allProjects[formData.get("project")];
+                
+                this.app.addTodoUseCase(selectedProject, todo);
+                if (addBtnEventHandler) addBtnEventHandler();
+                else this.renderMainContent(project);
+            });
+      
         // CANCEL INPUT EVENT LISTENER
         const cancelBtn = document.querySelector(".cancel-todo-btn");
         cancelBtn.addEventListener("click", (e) => {
@@ -190,6 +191,8 @@ class DisplayController {
             const option = document.createElement("option");
             option.textContent = capitalize(project.title);
             option.value = i;
+            console.error(project, "project")
+            console.error(renderedProject, "R project")
             // Select project if it's the currently rendered project
             if (project.timestamp === renderedProject.timestamp){
                 console.log(project)
@@ -305,8 +308,13 @@ class DisplayController {
         const allTasks = document.querySelector("#all-tasks");
         allTasks.addEventListener("click", ()=>{
             this.renderAllTasks();
-            this.$appendTodoInputComponent(content, projects[0])
-            this.overrideAddTodoEventListener()
+            console.log("projects list:", projects)
+            this.$appendTodoInputComponent(content, projects[0], ()=>{
+    
+                this.enableAllTasksView();
+                console.log("blabla");
+            })
+            
         })
     }
     renderAllTasks(){
@@ -328,6 +336,7 @@ class DisplayController {
         const addBtn = document.querySelector(".add-todo-btn");
         addBtn.addEventListener("click", ()=>{
             console.log("overrriden")
+            
             this.renderAllTasks();
             this.$appendTodoInputComponent(content, projects[0])
         })
