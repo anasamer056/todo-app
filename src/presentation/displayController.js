@@ -7,7 +7,6 @@ import todoFromBtns from "./components/todoInput/todoFormBtns.html";
 import updateTodoBtns from "./components/todoInput/updateTodoBtns.html";
 import projectInputComponent from "./components/projectInput.html"
 import { getCurrentDateString, capitalize } from "../domain/helper.js";
-import pubsub from "./pubsub.js";
 
 class DisplayController {
     constructor(appController) {
@@ -19,7 +18,7 @@ class DisplayController {
     init() {
         const firstProject = this.app.initProject();
         this.renderSidebar();
-        this.renderAllTasks();
+        this.renderMainContent(firstProject)
     }
 
     // MAIN CONTENT
@@ -302,24 +301,21 @@ class DisplayController {
 
     //Sidebar 
     enableAllSidebarFeatures(){
-        this.enableAllTasksView();
-    }
-
-    enableAllTasksView(){
-        const content = document.querySelector("#content");
-        const projectsWrapper = document.createElement("div");
-        projectsWrapper.classList.add("projects-wrapper");
-        const projects = this.app.readProjectsUseCase();
         const allTasks = document.querySelector("#all-tasks");
         allTasks.addEventListener("click", this.renderAllTasks.bind(this));
     }
+
     renderAllTasks(){
+        const projects = this.app.readProjectsUseCase();
+        this.renderSummaryTasks(projects);
+    }
+
+    renderSummaryTasks(projects){
         const content = document.querySelector("#content");
         const projectsWrapper = document.createElement("div");
         projectsWrapper.classList.add("projects-wrapper");
         content.innerHTML = "";
         projectsWrapper.innerHTML = "";
-        const projects = this.app.readProjectsUseCase();
         projects.forEach((project)=>{
             const projectContainer = document.createElement("div")
             this.renderMainContentDetails(projectContainer, project);
