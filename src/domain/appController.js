@@ -1,6 +1,6 @@
 import LocalStorage from "../data/localStorage";
 import Project from "./entities/project";
-import { sortTodosByDateAsc, filterCurrentWeekTodos} from "./helper";
+import { sortTodosByDateAsc, filterCurrentWeekTodos, filterTodayTodos} from "./helper";
 
 class AppController {
     /**
@@ -12,7 +12,7 @@ class AppController {
     }
     // -TODO
     addTodoUseCase(project, todo){
-        this.db.addTodoToDb(project, todo); 
+        return this.db.addTodoToDb(project, todo); 
     }
     readTodosUseCase(project) {
         return this.db.readTodosFromDb(project);
@@ -39,6 +39,18 @@ class AppController {
     
     removeProjectUseCase(project){
         this.db.removeProjectFromDb(project);
+    }
+
+    getProjectsSortedByDate(){
+        return sortTodosByDateAsc(this.db.readPojectsFromDb())
+    }
+
+    getWeekProjectsUseCase(){
+        return filterCurrentWeekTodos(this.db.readPojectsFromDb())
+    }
+    
+    getTodayProjectsUseCase(){
+        return filterTodayTodos(this.db.readPojectsFromDb());
     }
 
     /**

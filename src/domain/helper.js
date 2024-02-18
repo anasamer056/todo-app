@@ -1,31 +1,43 @@
-import {compareAsc} from "date-fns";
+import { compareAsc } from "date-fns";
 
-function getCurrentDateString(){
+function getCurrentDateString() {
 
     const year = new Date().getFullYear().toString();
-    const month = (new Date().getMonth()+1).toString().padStart(2, "0");
+    const month = (new Date().getMonth() + 1).toString().padStart(2, "0");
     const day = new Date().getDate().toString().padStart(2, "0");
 
     return year + "-" + month + "-" + day;
 }
 
-function capitalize(string){
+function capitalize(string) {
     return string[0].toUpperCase() + string.slice(1).toLowerCase();
 }
-function sortTodosByDateAsc(todoList){
-    return todoList.sort((a,b)=>compareAsc(a.dueDate, b.dueDate));
+function sortTodosByDateAsc(projects) {
+    projects.forEach((project) => {
+        project.todos = project.todos.sort((a, b) => compareAsc(a.dueDate, b.dueDate));
+    })
+    console.log("blabalba");
+    return projects;
 }
 
-function filterCurrentWeekTodos(projects){
+function filterCurrentWeekTodos(projects) {
     const today = new Date()
     const oneWeekFromNow = new Date(today);
-
-    projects.forEach((project)=>{
-        project
-    })
     oneWeekFromNow.setDate(today.getDate() + 7);
-    todos.filter((todo)=>todo.dueDate < oneWeekFromNow);
+
+    projects.forEach((project) => {
+        project.todos = project.todos.filter((todo) => todo.dueDate < oneWeekFromNow);
+    })
+    return projects;
+}
+
+function filterTodayTodos(projects) {
+    const today = new Date();
+    projects.forEach((project) => {
+        project.todos = project.todos.filter((todo) => todo.dueDate.toDateString() === today.toDateString());
+    })
+    return projects;
 }
 
 
-export {getCurrentDateString, capitalize, sortTodosByDateAsc, filterCurrentWeekTodos};
+export { getCurrentDateString, capitalize, sortTodosByDateAsc, filterCurrentWeekTodos, filterTodayTodos };

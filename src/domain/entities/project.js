@@ -17,12 +17,13 @@ class Project {
     static fromJSON(projectJson){
         const parsedJson = JSON.parse(projectJson);
         const todos = Todo.parseTodoList(parsedJson.todos)
-        return new Project(parsedJson.title, parsedJson.timestamp);
+        return new Project(parsedJson.title, parsedJson.timestamp, todos);
     }
 
-    toJSON(){
-        return JSON.stringify(this);
-    }
+    // toJSON(){
+    //     console.log(this);
+    //     return JSON.stringify(this);
+    // }
 }
 
 export default Project;

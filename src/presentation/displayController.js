@@ -28,6 +28,7 @@ class DisplayController {
      * @param {Project} project 
      */
     renderMainContent(project) {
+        console.log(project)
         const content = document.querySelector("#content");
         this.renderMainContentDetails(content, project);
         this.$appendTodoInputComponent(content, project);
@@ -41,7 +42,8 @@ class DisplayController {
         const todoContainer = document.createElement("div");
         todoContainer.classList.add("todo-container");
 
-        const todos = this.app.readTodosUseCase(project);
+        const todos = project.todos;
+        console.log(todos)
         todos.forEach((todo, i) => {
             this.$renderTodo(todoContainer, project, todo, i);
         });
@@ -167,14 +169,19 @@ class DisplayController {
                 const todo = new Todo(formData.get("title"), formData.get("due-date"), formData.get("priority"));
                 const allProjects = this.app.readProjectsUseCase();
                 const selectedProject = allProjects[formData.get("project")];
-                
-                this.app.addTodoUseCase(selectedProject, todo);
+                console.log("here")
+                const newProject = this.app.addTodoUseCase(selectedProject, todo);
                 const content = document.querySelector("#content");
                 if (content.classList.length === 0) {
-                    this.renderMainContent(project);
+                    this.renderMainContent(newProject);
                 } else if(content.classList.contains("all-tasks")){
                     this.renderAllTasks();
+                } else if(content.classList.contains("week-tasks")){
+                    this.renderWeekTasks();
+                } else if(content.classList.contains("today-tasks")){
+                    this.renderTodayTasks();
                 }
+                this.renderSidebar();
             });
       
         // CANCEL INPUT EVENT LISTENER
@@ -210,6 +217,7 @@ class DisplayController {
         const projectsContainer = document.querySelector("#projects-container")
         projectsContainer.innerHTML = "";
         const projects = this.app.readProjectsUseCase();
+        console.log("list", projects);
         this.$renderProjects(projectsContainer, projects);
         this.$appendProjectInputComponent();
         this.enableAllSidebarFeatures();
@@ -242,6 +250,7 @@ class DisplayController {
             projectWrapper.addEventListener("click", () => {
                 const content = document.querySelector("#content");
                 content.className = "";
+                console.log("there")
                 this.renderMainContent(project);
             })
 
@@ -312,22 +321,29 @@ class DisplayController {
     }
 
     renderAllTasks(){
-        const projects = this.app.readProjectsUseCase();
+        console.log("called")
+        const projects = this.app.getProjectsSortedByDate();
         this.renderSummaryTasks(projects);
+        content.classList.add("all-tasks");
     }
     renderWeekTasks(){
         const content = document.querySelector("#content");
         content.innerHTML = "";
-        content.textContent = "To be implemented"
+        const weekProjects = this.app.getWeekProjectsUseCase();
+        this.renderSummaryTasks(weekProjects);
+        content.classList.add("week-tasks");
     }
     renderTodayTasks(){
         const content = document.querySelector("#content");
         content.innerHTML = "";
-        content.textContent = "To be implemented"
+        const todayProjects = this.app.getTodayProjectsUseCase();
+        this.renderSummaryTasks(todayProjects);
+        content.classList.add("today-tasks");
     }
 
     renderSummaryTasks(projects){
         const content = document.querySelector("#content");
+        content.classList = "";
         const projectsWrapper = document.createElement("div");
         projectsWrapper.classList.add("projects-wrapper");
         content.innerHTML = "";
@@ -339,7 +355,6 @@ class DisplayController {
         })
         content.appendChild(projectsWrapper);
         this.$appendTodoInputComponent(content, projects[0]);
-        content.classList.add("all-tasks");
     }
 }
 export default DisplayController;

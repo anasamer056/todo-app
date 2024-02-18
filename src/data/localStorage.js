@@ -17,7 +17,8 @@ class LocalStorage {
             throw new LocalStorageNotAvailable();
         }
         project.todos.push(todo);
-        localStorage.setItem(project.timestamp, project.toJSON());        
+        localStorage.setItem(project.timestamp, JSON.stringify(project));        
+        return project;
     }
 
     removeTodoFromDb(project, todoIndex){
@@ -27,7 +28,7 @@ class LocalStorage {
 
     updateTodoInDb(project, todoIndex, newTodo){
       project.todos[todoIndex] = newTodo;
-      localStorage.setItem(project.timestamp, project.toJSON()); 
+      localStorage.setItem(project.timestamp, JSON.stringify(project)); 
     }
 
     // PROJECT
@@ -36,7 +37,7 @@ class LocalStorage {
       if(!this.$storageAvailable()){
         throw new LocalStorageNotAvailable();
       } else {
-        localStorage.setItem(project.timestamp, project.toJSON())
+        localStorage.setItem(project.timestamp, JSON.stringify(project))
       }
     }
 
