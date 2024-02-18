@@ -23,7 +23,7 @@ class LocalStorage {
 
     removeTodoFromDb(project, todoIndex){
       project.todos.splice(todoIndex, 1);
-      localStorage.setItem(project.timestamp, JSON.stringify(new LocalStorageWrapper(project, todoList)));
+      localStorage.setItem(project.timestamp, JSON.stringify(project));
     }
 
     updateTodoInDb(project, todoIndex, newTodo){

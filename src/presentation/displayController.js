@@ -102,9 +102,8 @@ class DisplayController {
             dueDateInput.value = todo.dueDate.toISOString().substring(0,10);
             const priority = document.querySelector(".update-todo #priority");
             priority.value = todo.priority
-
+            this.addProjectsToTodoForm(project);
             const cancelBtn = document.querySelector(".cancel-update-btn");
-            console.log(cancelBtn)
 
             cancelBtn.addEventListener("click", (e) => {
                 e.preventDefault();
@@ -195,13 +194,14 @@ class DisplayController {
 
     }
     addProjectsToTodoForm(renderedProject){
+        
         const projectSelect = document.querySelector("select#project");
         const projectsList = this.app.readProjectsUseCase();
         projectsList.forEach((project, i)=> {
             const option = document.createElement("option");
             option.textContent = capitalize(project.title);
             option.value = i;
-    
+            console.log(option)
             // Select project if it's the currently rendered project
             if (project.timestamp === renderedProject.timestamp){
                 option.setAttribute("selected", "selected");
@@ -304,6 +304,8 @@ class DisplayController {
         formWrapper.innerHTML = todoInputComponent;
         const form = document.querySelector(".update-todo .todo-form");
         form.innerHTML += updateTodoBtns;
+        const projectSelect = dialog.querySelector(".update-todo #project");
+        projectSelect.parentElement.remove();
         form.classList.remove("form-invisible");
         form.classList.add("form-visible");
     }
