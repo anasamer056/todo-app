@@ -19,21 +19,7 @@ class DisplayController {
     init() {
         const firstProject = this.app.initProject();
         this.renderSidebar();
-        this.renderMainContent(firstProject);
-        pubsub.subscribe("addTodoFromProject", (project)=>{
-            const content = document.querySelector("#content");
-            if (content.classList.length > 0) return;
-            this.renderMainContent(project);
-        })
-        pubsub.subscribe("addTodoFromAllTasks", ()=>{
-            console.log(this);
-            const content = document.querySelector("#content");
-            if (!content.classList.contains("all-tasks")) return;
-            this.renderAllTasks();
-            
-        })
-        
-
+        this.renderAllTasks();
     }
 
     // MAIN CONTENT
@@ -184,9 +170,12 @@ class DisplayController {
                 const selectedProject = allProjects[formData.get("project")];
                 
                 this.app.addTodoUseCase(selectedProject, todo);
-                
-                pubsub.publish("addTodoFromProject", project);
-                pubsub.publish("addTodoFromAllTasks");
+                const content = document.querySelector("#content");
+                if (content.classList.length === 0) {
+                    this.renderMainContent(project);
+                } else if(content.classList.contains("all-tasks")){
+                    this.renderAllTasks();
+                }
             });
       
         // CANCEL INPUT EVENT LISTENER
