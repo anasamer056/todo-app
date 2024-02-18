@@ -15,7 +15,6 @@ class AppController {
         this.db.addTodoToDb(project, todo); 
     }
     readTodosUseCase(project) {
-        console.log("Here");
         return sortTodosByDateAsc(this.db.readTodosFromDb(project));
     }
     

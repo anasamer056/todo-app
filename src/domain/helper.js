@@ -13,7 +13,6 @@ function capitalize(string){
     return string[0].toUpperCase() + string.slice(1).toLowerCase();
 }
 function sortTodosByDateAsc(todoList){
-    console.log(todoList)
     return todoList.sort((a,b)=>compareAsc(a.dueDate, b.dueDate));
 }
 

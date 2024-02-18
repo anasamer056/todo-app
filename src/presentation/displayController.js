@@ -7,6 +7,7 @@ import todoFromBtns from "./components/todoInput/todoFormBtns.html";
 import updateTodoBtns from "./components/todoInput/updateTodoBtns.html";
 import projectInputComponent from "./components/projectInput.html"
 import { getCurrentDateString, capitalize } from "../domain/helper.js";
+import pubsub from "./pubsub.js";
 
 class DisplayController {
     constructor(appController) {
@@ -19,6 +20,10 @@ class DisplayController {
         const firstProject = this.app.initProject();
         this.renderSidebar();
         this.renderMainContent(firstProject);
+        pubsub.subscribe("addTodo", (project)=>{
+            console.log(this);
+            this.renderMainContent(project);
+        })
         
 
     }
@@ -138,7 +143,7 @@ class DisplayController {
      * @param {Element} parentNode 
      * @param {Project} project 
      */
-    $appendTodoInputComponent(parentNode, project, addBtnEventHandler) {
+    $appendTodoInputComponent(parentNode, project) {
         // CREATE FORM
         const div = document.createElement("div");
         div.classList.add("btn-to-input");
@@ -170,8 +175,8 @@ class DisplayController {
                 const selectedProject = allProjects[formData.get("project")];
                 
                 this.app.addTodoUseCase(selectedProject, todo);
-                if (addBtnEventHandler) addBtnEventHandler();
-                else this.renderMainContent(project);
+                pubsub.publish("addTodo", project);
+                // this.renderMainContent(project);
             });
       
         // CANCEL INPUT EVENT LISTENER
@@ -191,11 +196,9 @@ class DisplayController {
             const option = document.createElement("option");
             option.textContent = capitalize(project.title);
             option.value = i;
-            console.error(project, "project")
-            console.error(renderedProject, "R project")
+    
             // Select project if it's the currently rendered project
             if (project.timestamp === renderedProject.timestamp){
-                console.log(project)
                 option.setAttribute("selected", "selected");
             }
             projectSelect.appendChild(option);
@@ -272,6 +275,7 @@ class DisplayController {
             const project = new Project(formData.get("title"), Date.now());
             this.app.addProjectUseCase(project);
             this.renderSidebar();
+
         });
 
         // CANCEL INPUT EVENT LISTENER
@@ -309,11 +313,7 @@ class DisplayController {
         allTasks.addEventListener("click", ()=>{
             this.renderAllTasks();
             console.log("projects list:", projects)
-            this.$appendTodoInputComponent(content, projects[0], ()=>{
-    
-                this.enableAllTasksView();
-                console.log("blabla");
-            })
+            this.$appendTodoInputComponent(content, projects[0]);
             
         })
     }
@@ -330,16 +330,6 @@ class DisplayController {
             projectsWrapper.appendChild(projectContainer)
         })
         content.appendChild(projectsWrapper);
-    }
-    overrideAddTodoEventListener(){
-        const projects = this.app.readProjectsUseCase();
-        const addBtn = document.querySelector(".add-todo-btn");
-        addBtn.addEventListener("click", ()=>{
-            console.log("overrriden")
-            
-            this.renderAllTasks();
-            this.$appendTodoInputComponent(content, projects[0])
-        })
     }
 }
 export default DisplayController;
