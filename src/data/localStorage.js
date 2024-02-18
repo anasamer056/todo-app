@@ -16,34 +16,18 @@ class LocalStorage {
         if(!this.$storageAvailable()){
             throw new LocalStorageNotAvailable();
         }
-
-        const parsedData = JSON.parse(localStorage.getItem(project.timestamp));
-        const todoList = parsedData.todoList;
-        todoList.push(todo);
-        localStorage.setItem(project.timestamp, JSON.stringify(new LocalStorageWrapper(project, todoList)));        
-    }
-
-    readTodosFromDb(project){
-      if (!localStorage.getItem(project.timestamp)){
-        throw new ProjectNotFound();
-      }
-      const parsedData = JSON.parse(localStorage.getItem(project.timestamp));
-      return Todo.parseTodoList(parsedData.todoList);
+        project.todos.push(todo);
+        localStorage.setItem(project.timestamp, project.toJSON());        
     }
 
     removeTodoFromDb(project, todoIndex){
-      const parsedData = JSON.parse(localStorage.getItem(project.timestamp));
-      const todoList = parsedData.todoList; 
-      todoList.splice(todoIndex, 1);
+      project.todos.splice(todoIndex, 1);
       localStorage.setItem(project.timestamp, JSON.stringify(new LocalStorageWrapper(project, todoList)));
     }
 
     updateTodoInDb(project, todoIndex, newTodo){
-
-      const parsedData = JSON.parse(localStorage.getItem(project.timestamp));
-      const todoList = parsedData.todoList;
-      todoList[todoIndex] = newTodo;
-      localStorage.setItem(project.timestamp, JSON.stringify(new LocalStorageWrapper(project, todoList))); 
+      project.todos[todoIndex] = newTodo;
+      localStorage.setItem(project.timestamp, project.toJSON()); 
     }
 
     // PROJECT
@@ -52,7 +36,7 @@ class LocalStorage {
       if(!this.$storageAvailable()){
         throw new LocalStorageNotAvailable();
       } else {
-        localStorage.setItem(project.timestamp, JSON.stringify(new LocalStorageWrapper(project, [])))
+        localStorage.setItem(project.timestamp, project.toJSON())
       }
     }
 
@@ -65,7 +49,6 @@ class LocalStorage {
         const project = Project.fromJSON(projectJson);
         result.push(project);
       }
-      // console.warn(result);
       return result
     }
 

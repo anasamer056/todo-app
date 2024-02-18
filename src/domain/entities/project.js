@@ -1,3 +1,5 @@
+import Todo from "./todo.js";
+
 /**
  * Represents projects or lists into which the user can save todos
  */
@@ -6,14 +8,20 @@ class Project {
      * Creates a `Project`
      * @param {string} title - The title of the project
      */
-    constructor(title, timestamp){
+    constructor(title, timestamp, todos = []){
         this.title = title;
         this.timestamp = timestamp;
+        this.todos = todos;
     }
 
     static fromJSON(projectJson){
         const parsedJson = JSON.parse(projectJson);
-        return new Project(parsedJson.project.title, parsedJson.project.timestamp);
+        const todos = Todo.parseTodoList(parsedJson.todos)
+        return new Project(parsedJson.title, parsedJson.timestamp);
+    }
+
+    toJSON(){
+        return JSON.stringify(this);
     }
 }
 
