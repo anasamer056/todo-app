@@ -20,9 +20,17 @@ class DisplayController {
         const firstProject = this.app.initProject();
         this.renderSidebar();
         this.renderMainContent(firstProject);
-        pubsub.subscribe("addTodo", (project)=>{
-            console.log(this);
+        pubsub.subscribe("addTodoFromProject", (project)=>{
+            const content = document.querySelector("#content");
+            if (content.classList.length > 0) return;
             this.renderMainContent(project);
+        })
+        pubsub.subscribe("addTodoFromAllTasks", ()=>{
+            console.log(this);
+            const content = document.querySelector("#content");
+            if (!content.classList.contains("all-tasks")) return;
+            this.renderAllTasks();
+            
         })
         
 
@@ -143,6 +151,7 @@ class DisplayController {
      * @param {Element} parentNode 
      * @param {Project} project 
      */
+    
     $appendTodoInputComponent(parentNode, project) {
         // CREATE FORM
         const div = document.createElement("div");
@@ -175,8 +184,9 @@ class DisplayController {
                 const selectedProject = allProjects[formData.get("project")];
                 
                 this.app.addTodoUseCase(selectedProject, todo);
-                pubsub.publish("addTodo", project);
-                // this.renderMainContent(project);
+                
+                pubsub.publish("addTodoFromProject", project);
+                pubsub.publish("addTodoFromAllTasks");
             });
       
         // CANCEL INPUT EVENT LISTENER
@@ -242,6 +252,8 @@ class DisplayController {
 
             // RENDER PROJECT EVENT LISTENER 
             projectWrapper.addEventListener("click", () => {
+                const content = document.querySelector("#content");
+                content.className = "";
                 this.renderMainContent(project);
             })
 
@@ -310,12 +322,7 @@ class DisplayController {
         projectsWrapper.classList.add("projects-wrapper");
         const projects = this.app.readProjectsUseCase();
         const allTasks = document.querySelector("#all-tasks");
-        allTasks.addEventListener("click", ()=>{
-            this.renderAllTasks();
-            console.log("projects list:", projects)
-            this.$appendTodoInputComponent(content, projects[0]);
-            
-        })
+        allTasks.addEventListener("click", this.renderAllTasks.bind(this));
     }
     renderAllTasks(){
         const content = document.querySelector("#content");
@@ -330,6 +337,8 @@ class DisplayController {
             projectsWrapper.appendChild(projectContainer)
         })
         content.appendChild(projectsWrapper);
+        this.$appendTodoInputComponent(content, projects[0]);
+        content.classList.add("all-tasks");
     }
 }
 export default DisplayController;
