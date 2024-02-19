@@ -213,6 +213,9 @@ body {
         }
     }
 }
+.active-item {
+    background-color: var(--back-light-black)
+}
 
 .list-item:hover {
     background-color: var(--back-light-black);

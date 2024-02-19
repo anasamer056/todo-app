@@ -18,7 +18,7 @@ class DisplayController {
     init() {
         const firstProject = this.app.initProject();
         this.renderSidebar();
-        this.renderMainContent(firstProject)
+        this.renderAllTasks();
     }
 
     // MAIN CONTENT
@@ -33,7 +33,7 @@ class DisplayController {
         this.renderMainContentDetails(content, project);
         this.$appendTodoInputComponent(content, project);
     }
-    renderMainContentDetails(parentNode, project){
+    renderMainContentDetails(parentNode, project) {
         parentNode.innerHTML = '';
 
         const projectTitleDiv = document.createElement("h3");
@@ -43,7 +43,10 @@ class DisplayController {
         todoContainer.classList.add("todo-container");
 
         const todos = project.todos;
-        console.log(todos)
+        if (!todos.length){
+            todoContainer.textContent = "Nothing to see here";
+        }
+
         todos.forEach((todo, i) => {
             this.$renderTodo(todoContainer, project, todo, i);
         });
@@ -62,9 +65,9 @@ class DisplayController {
 
         // PRIORITY FLAG
         const priority = document.createElement("div");
-        
+
         priority.classList.add("priority", todo.priority);
-        
+
         todoDetails.appendChild(priority);
 
         // CHECKBOX
@@ -86,7 +89,7 @@ class DisplayController {
         removeTodoBtn.addEventListener("click", () => {
             console.log("test")
             this.app.removeTodoUseCase(project, todoIndex);
-            this.renderMainContent(project);
+            this.renderActiveView(project);
         });
         todoDetails.appendChild(removeTodoBtn);
 
@@ -99,7 +102,7 @@ class DisplayController {
             const titleInput = document.querySelector(".update-todo #title");
             titleInput.value = todo.title;
             const dueDateInput = document.querySelector(".update-todo #due-date");
-            dueDateInput.value = todo.dueDate.toISOString().substring(0,10);
+            dueDateInput.value = todo.dueDate.toISOString().substring(0, 10);
             const priority = document.querySelector(".update-todo #priority");
             priority.value = todo.priority
             this.addProjectsToTodoForm(project);
@@ -111,12 +114,12 @@ class DisplayController {
             })
 
             const updateBtn = document.querySelector(".update-todo-btn");
-            updateBtn.addEventListener("click", ()=>{
+            updateBtn.addEventListener("click", () => {
                 const form = document.querySelector("dialog form");
                 const data = new FormData(form);
                 const newTodo = new Todo(data.get("title"), data.get("due-date"), data.get("priority"));
                 const newProject = this.app.updateTodoUseCase(project, todoIndex, newTodo)
-                
+
                 this.renderActiveView(newProject);
             })
         })
@@ -124,21 +127,21 @@ class DisplayController {
         parentNode.appendChild(todoWrapper);
     }
 
-    renderTodoDate(todo){
-        if (todo.dueDate.getFullYear() === new Date().getFullYear()){
-            return todo.dueDate.toLocaleString('default', { month: 'short', day:"numeric" });
+    renderTodoDate(todo) {
+        if (todo.dueDate.getFullYear() === new Date().getFullYear()) {
+            return todo.dueDate.toLocaleString('default', { month: 'short', day: "numeric" });
         }
-        else return todo.dueDate.toLocaleString('default', { month: 'short', day:"numeric" , year: "numeric"});
+        else return todo.dueDate.toLocaleString('default', { month: 'short', day: "numeric", year: "numeric" });
     }
 
-   
+
 
     /**
      * Creates form elements and appends them to the `parentNode`
      * @param {Element} parentNode 
      * @param {Project} project 
      */
-    
+
     $appendTodoInputComponent(parentNode, project) {
         // CREATE FORM
         const div = document.createElement("div");
@@ -147,7 +150,7 @@ class DisplayController {
         parentNode.appendChild(div);
         document.querySelector(".todo-form").innerHTML += todoFromBtns;
         document.querySelector(".todo-form #due-date").value = getCurrentDateString();
-        
+
         // POPULATE SELECT TAG FOR PROJECT NAMES
         this.addProjectsToTodoForm(project);
 
@@ -162,19 +165,19 @@ class DisplayController {
 
         // ADD TODO event listener
         const addBtn = document.querySelector(".add-todo-btn");
-            addBtn.addEventListener("click", (e) => {
-                e.preventDefault();
-                showInputBtn.style.display = "Block";
-                const formData = new FormData(todoForm);
-                const todo = new Todo(formData.get("title"), formData.get("due-date"), formData.get("priority"));
-                const allProjects = this.app.readProjectsUseCase();
-                const selectedProject = allProjects[formData.get("project")];
-                console.log("here")
-                const newProject = this.app.addTodoUseCase(selectedProject, todo);
-                
-                this.renderActiveView(newProject);
-            });
-      
+        addBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            showInputBtn.style.display = "Block";
+            const formData = new FormData(todoForm);
+            const todo = new Todo(formData.get("title"), formData.get("due-date"), formData.get("priority"));
+            const allProjects = this.app.readProjectsUseCase();
+            const selectedProject = allProjects[formData.get("project")];
+            console.log("here")
+            const newProject = this.app.addTodoUseCase(selectedProject, todo);
+
+            this.renderActiveView(newProject);
+        });
+
         // CANCEL INPUT EVENT LISTENER
         const cancelBtn = document.querySelector(".cancel-todo-btn");
         cancelBtn.addEventListener("click", (e) => {
@@ -185,33 +188,44 @@ class DisplayController {
         })
 
     }
-    renderActiveView(newProject){
+    renderActiveView(newProject) {
         const content = document.querySelector("#content");
 
         if (content.classList.length === 0) {
             this.renderMainContent(newProject);
-        } else if(content.classList.contains("all-tasks")){
+        } else if (content.classList.contains("all-tasks")) {
             this.renderAllTasks();
-        } else if(content.classList.contains("week-tasks")){
+        } else if (content.classList.contains("week-tasks")) {
             this.renderWeekTasks();
-        } else if(content.classList.contains("today-tasks")){
+        } else if (content.classList.contains("today-tasks")) {
             this.renderTodayTasks();
         }
         this.renderSidebar();
     }
 
+    highlightSidebarItem(activeItem) {
+        const sidebar = document.querySelector(".sidebar");
+        const sidebarItems = sidebar.querySelectorAll(".list-item");
+        console.log(sidebarItems);
+        sidebarItems.forEach((item) => {
+            item.classList.remove("active-item");
+        })
+        activeItem.classList.add("active-item");
+    }
 
-    addProjectsToTodoForm(renderedProject){
-        
+
+    addProjectsToTodoForm(renderedProject) {
+
         const projectSelect = document.querySelector("select#project");
         const projectsList = this.app.readProjectsUseCase();
-        projectsList.forEach((project, i)=> {
+        console.log(projectsList);
+        projectsList.forEach((project, i) => {
             const option = document.createElement("option");
             option.textContent = capitalize(project.title);
             option.value = i;
             console.log(option)
             // Select project if it's the currently rendered project
-            if (project.timestamp === renderedProject.timestamp){
+            if (project.timestamp === renderedProject.timestamp) {
                 option.setAttribute("selected", "selected");
             }
             projectSelect.appendChild(option);
@@ -258,7 +272,8 @@ class DisplayController {
             projectWrapper.addEventListener("click", () => {
                 const content = document.querySelector("#content");
                 content.className = "";
-                console.log("there")
+                this.highlightSidebarItem(projectWrapper);
+
                 this.renderMainContent(project);
             })
 
@@ -319,31 +334,40 @@ class DisplayController {
     }
 
     //Sidebar 
-    enableAllSidebarFeatures(){
+    enableAllSidebarFeatures() {
         const allTasks = document.querySelector("#all-tasks");
-        allTasks.addEventListener("click", this.renderAllTasks.bind(this));
+        allTasks.addEventListener("click", () => {
+            this.renderAllTasks();
+            this.highlightSidebarItem(allTasks);
+        });
 
         const weekTasks = document.querySelector("#week-tasks");
-        weekTasks.addEventListener("click", this.renderWeekTasks.bind(this));
+        weekTasks.addEventListener("click", ()=>
+        {
+            this.renderWeekTasks();
+            this.highlightSidebarItem(weekTasks);
+        });
 
         const todayTasks = document.querySelector("#today-tasks");
-        todayTasks.addEventListener("click", this.renderTodayTasks.bind(this))
+        todayTasks.addEventListener("click", ()=>{
+            this.renderTodayTasks();
+            this.highlightSidebarItem(todayTasks);
+        })
     }
 
-    renderAllTasks(){
-        console.log("called")
+    renderAllTasks() {
         const projects = this.app.getProjectsSortedByDate();
         this.renderSummaryTasks(projects);
         content.classList.add("all-tasks");
     }
-    renderWeekTasks(){
+    renderWeekTasks() {
         const content = document.querySelector("#content");
         content.innerHTML = "";
         const weekProjects = this.app.getWeekProjectsUseCase();
         this.renderSummaryTasks(weekProjects);
         content.classList.add("week-tasks");
     }
-    renderTodayTasks(){
+    renderTodayTasks() {
         const content = document.querySelector("#content");
         content.innerHTML = "";
         const todayProjects = this.app.getTodayProjectsUseCase();
@@ -351,14 +375,14 @@ class DisplayController {
         content.classList.add("today-tasks");
     }
 
-    renderSummaryTasks(projects){
+    renderSummaryTasks(projects) {
         const content = document.querySelector("#content");
         content.classList = "";
         const projectsWrapper = document.createElement("div");
         projectsWrapper.classList.add("projects-wrapper");
         content.innerHTML = "";
         projectsWrapper.innerHTML = "";
-        projects.forEach((project)=>{
+        projects.forEach((project) => {
             const projectContainer = document.createElement("div")
             this.renderMainContentDetails(projectContainer, project);
             projectsWrapper.appendChild(projectContainer)

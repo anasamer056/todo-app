@@ -46,7 +46,7 @@ class AppController {
     }
 
     getWeekProjectsUseCase(){
-        return filterCurrentWeekTodos(this.db.readPojectsFromDb())
+        return sortTodosByDateAsc(filterCurrentWeekTodos(this.db.readPojectsFromDb()))
     }
     
     getTodayProjectsUseCase(){

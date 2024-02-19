@@ -13,8 +13,12 @@ function capitalize(string) {
     return string[0].toUpperCase() + string.slice(1).toLowerCase();
 }
 function sortTodosByDateAsc(projects) {
-    projects.forEach((project) => {
+    projects.forEach((project, i) => {
         project.todos = project.todos.sort((a, b) => compareAsc(a.dueDate, b.dueDate));
+
+        if (project.todos.length === 0){
+            projects.splice(i,1);
+        }
     })
     console.log("blabalba");
     return projects;
