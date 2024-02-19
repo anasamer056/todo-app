@@ -43,13 +43,13 @@ class DisplayController {
         todoContainer.classList.add("todo-container");
 
         const todos = project.todos;
-        if (!todos.length){
-            todoContainer.textContent = "Nothing to see here";
+        if (todos.length) {
+            todos.forEach((todo, i) => {
+                this.$renderTodo(todoContainer, project, todo, i);
+            });
+        } else {
+            todoContainer.textContent = "Move along. Nothing to see here."
         }
-
-        todos.forEach((todo, i) => {
-            this.$renderTodo(todoContainer, project, todo, i);
-        });
 
         parentNode.appendChild(projectTitleDiv)
         parentNode.appendChild(todoContainer);
@@ -152,7 +152,9 @@ class DisplayController {
         document.querySelector(".todo-form #due-date").value = getCurrentDateString();
 
         // POPULATE SELECT TAG FOR PROJECT NAMES
+        console.log(project)
         this.addProjectsToTodoForm(project);
+
 
         // SHOW FORM EVENT LISTENER
         const todoForm = document.querySelector(".todo-form");
@@ -342,14 +344,13 @@ class DisplayController {
         });
 
         const weekTasks = document.querySelector("#week-tasks");
-        weekTasks.addEventListener("click", ()=>
-        {
+        weekTasks.addEventListener("click", () => {
             this.renderWeekTasks();
             this.highlightSidebarItem(weekTasks);
         });
 
         const todayTasks = document.querySelector("#today-tasks");
-        todayTasks.addEventListener("click", ()=>{
+        todayTasks.addEventListener("click", () => {
             this.renderTodayTasks();
             this.highlightSidebarItem(todayTasks);
         })
@@ -388,7 +389,8 @@ class DisplayController {
             projectsWrapper.appendChild(projectContainer)
         })
         content.appendChild(projectsWrapper);
-        this.$appendTodoInputComponent(content, projects[0]);
+        const allProjects = this.app.readProjectsUseCase();
+        this.$appendTodoInputComponent(content, allProjects[0]);
     }
 }
 export default DisplayController;

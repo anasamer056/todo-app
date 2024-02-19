@@ -47,7 +47,7 @@ function filterTodayTodos(projects) {
         if (project.todos.length === 0){
             projects.splice(i,1);
         }
-    })
+    })                                                      
     return projects;
 }
 
